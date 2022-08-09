@@ -1,0 +1,66 @@
+Market
+=========================================================
+NFTDropMarketFixedPriceSale
+···························
+[Collector] Mint
+    134,600 1st mint
+    146,900 1st mint w. buy referrer
+    117,500 2nd mint
+    129,800 2nd mint w. buy referrer
+
+[Collector] Mint Batch
+    359,100 1st Mint 10
+    371,400 1st Mint 10 w. buy referrer
+    342,000 2nd Mint 10
+    354,300 2nd Mint 10 w. buy referrer
+
+createFixedPriceSale
+     73,300 
+
+NFT
+=========================================================
+Collection
+···························
+Approve
+     48,900 
+
+Burn
+     56,300 Last NFT
+     56,300 with other NFTs
+
+Mint
+    170,500 1st mint
+    195,200 1st mint & approve
+    153,400 2nd mint
+    158,200 2nd mint & approve [approval is redundant]
+
+Self Destruct
+     32,500 
+
+Factory
+···························
+Create Collection
+    174,600 
+
+Create NFTDropCollection
+    319,300 
+    294,300 w.o Market as Minter
+
+NFTDropCollection
+···························
+[Creator] Mint
+     81,700 1st mint
+     64,600 2nd mint
+
+Burn
+     39,300 Last NFT
+     44,100 with other NFTs
+
+Self Destruct
+     34,500 
+
+Update
+     33,200 MaxTokenId
+     41,200 PreReveal Content
+     34,700 Reveal Collection
+

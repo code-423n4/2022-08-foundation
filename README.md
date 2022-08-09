@@ -1,59 +1,167 @@
-# ✨ So you want to sponsor a contest
-
-This `README.md` contains a set of checklists for our contest collaboration.
-
-Your contest will use two repos: 
-- **a _contest_ repo** (this one), which is used for scoping your contest and for providing information to contestants (wardens)
-- **a _findings_ repo**, where issues are submitted (shared with you after the contest) 
-
-Ultimately, when we launch the contest, this contest repo will be made public and will contain the smart contracts to be reviewed and all the information needed for contest participants. The findings repo will be made public after the contest report is published and your team has mitigated the identified issues.
-
-Some of the checklists in this doc are for **C4 (🐺)** and some of them are for **you as the contest sponsor (⭐️)**.
-
----
-
-# Contest setup
-
-## ⭐️ Sponsor: Provide contest details
-
-Under "SPONSORS ADD INFO HERE" heading below, include the following:
-
-- [ ] Create a PR to this repo with the below changes:
-- [ ] Name of each contract and:
-  - [ ] source lines of code (excluding blank lines and comments) in each
-  - [ ] external contracts called in each
-  - [ ] libraries used in each
-- [ ] Describe any novel or unique curve logic or mathematical models implemented in the contracts
-- [ ] Does the token conform to the ERC-20 standard? In what specific ways does it differ?
-- [ ] Describe anything else that adds any special logic that makes your approach unique
-- [ ] Identify any areas of specific concern in reviewing the code
-- [ ] Add all of the code to this repo that you want reviewed
-
-
----
-
-# Contest prep
-
-## ⭐️ Sponsor: Contest prep
-- [ ] Provide a self-contained repository with working commands that will build (at least) all in-scope contracts, and commands that will run tests producing gas reports for the relevant contracts.
-- [ ] Make sure your code is thoroughly commented using the [NatSpec format](https://docs.soliditylang.org/en/v0.5.10/natspec-format.html#natspec-format).
-- [ ] Modify the bottom of this `README.md` file to describe how your code is supposed to work with links to any relevent documentation and any other criteria/details that the C4 Wardens should keep in mind when reviewing. ([Here's a well-constructed example.](https://github.com/code-423n4/2021-06-gro/blob/main/README.md))
-- [ ] Please have final versions of contracts and documentation added/updated in this repo **no less than 24 hours prior to contest start time.**
-- [ ] Be prepared for a 🚨code freeze🚨 for the duration of the contest — important because it establishes a level playing field. We want to ensure everyone's looking at the same code, no matter when they look during the contest. (Note: this includes your own repo, since a PR can leak alpha to our wardens!)
-- [ ] Promote the contest on Twitter (optional: tag in relevant protocols, etc.)
-- [ ] Share it with your own communities (blog, Discord, Telegram, email newsletters, etc.)
-- [ ] Optional: pre-record a high-level overview of your protocol (not just specific smart contract functions). This saves wardens a lot of time wading through documentation.
-- [ ] Delete this checklist and all text above the line below when you're ready.
-
----
-
 # Foundation Drops contest details
-- $38,000 USDC main award pot
-- $2,000 USDC gas optimization award pot
+
+- \$38,000 USDC main award pot
+- \$2,000 USDC gas optimization award pot
 - Join [C4 Discord](https://discord.gg/code4rena) to register
 - Submit findings [using the C4 form](https://code4rena.com/contests/2022-08-foundation-contest/submit)
 - [Read our guidelines for more details](https://docs.code4rena.com/roles/wardens)
 - Starts August 11, 2022 20:00 UTC
 - Ends August 15, 2022 20:00 UTC
 
-[ ⭐️ SPONSORS ADD INFO HERE ]
+# Overview
+
+We're releasing four new contracts that are in scope for the audit:
+
+- [NFT Collection Factory](./contracts/NFTCollectionFactory.sol): An upgradable factory that creates NFT collections. Supports creating and initializing ERC-1165 minimal proxies pointing to NFT collection contract templates.
+- [NFT Drop Collection](./contracts/NFTDropCollection.sol): A contract to batch mint and reveal a collection of NFTs. A creator deploys this collection with the intent of creating a mint drop with a reveal step where all NFTs in the collection have the same baseURI and are differentiated through their token id. In addition to the creator, to facilitate sales by marketplace contracts, any address can be granted permissions to mint from this contract.
+- [NFT Collection](./contracts/NFTCollection.sol): A collection of NFTs by a single creator. The NFTs produced by this collection are 1-1 with support for unique baseURI. All NFTs from this contract are minted by the same creator. Note that, this contract exists on mainnet and has been in active use for the past year; however, we've refactored/cleaned it up to be more maintainable, extensible and gas efficient and will be deploying the new version in our upcoming release.
+- [NFT Drop Market](./contracts/NFTDropMarket.sol): A Foundation market contract which enables creators to drop NFT collections. Creators can set sale terms on their deployed NFT collections and collectors can mint from them using the NFT drop market. Currently only supports fixed price sales of `NFT Drop Collections`, does not support any other mechanic or collection type.
+
+For more detailed docs on drops please navigate to [FoundationOS](https://os.foundation.app/docs/creator-tools/drop).
+
+# Scope
+
+## In scope
+
+| Contract                                                         | Documentation                                                                          | Goerli Deployment                                                                                                                              |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [NFTCollectionFactory.sol](./contracts/NFTCollectionFactory.sol) | [NFTCollectionFactory](https://docs.foundation.app/docs/protocol/nftcollectionfactory) | [0xf06eeD0514346511Ffe61efD6F6F0C66bBa284Db](https://goerli.etherscan.io/address/0xf06eeD0514346511Ffe61efD6F6F0C66bBa284Db#readProxyContract) |
+| [NFTDropCollection.sol](./contracts/NFTDropCollection.sol)       | [NFTDropCollection](https://docs.foundation.app/docs/protocol/nftdropcollection)       | [0xce844d8b74ad9969bc6d17261dd52693b51320d5](https://goerli.etherscan.io/address/0xce844d8b74ad9969bc6d17261dd52693b51320d5#code)              |
+| [NFTCollection.sol](./contracts/NFTCollection.sol)               | [NFTCollection](https://docs.foundation.app/docs/protocol/nftcollection)               | [0x0d8f20128f93dde8e367adfbd78b2a7ca84a40cd](https://goerli.etherscan.io/address/0x0d8f20128f93dde8e367adfbd78b2a7ca84a40cd#code)              |
+| [NFTDropMarket.sol](./contracts/NFTDropMarket.sol)               | [NFTDropMarket](https://docs.foundation.app/docs/protocol/nftdropmarket)               | [0xe43562f11737443F760dBf885fa0D30c45C6927B](https://goerli.etherscan.io/address/0xe43562f11737443F760dBf885fa0D30c45C6927B#readProxyContract) |
+
+& all their inherited / library contracts.
+
+We would like to call out **extra attention** to [`NFTDropMarketFixedPriceSale`](./contracts/mixins/nftDropMarket/NFTDropMarketFixedPriceSale.sol) and [`MarketFees`](./contracts/mixins/shared/MarketFees.sol) mixins as both of them are highly critical paths that perform accounting, fund distribution and transfers.
+
+## Out of scope
+
+- [FoundationTreasury.sol](./contracts/FoundationTreasury.sol) and any of its dependencies
+- [FETH.sol](./contracts/FETH.sol) and any of its dependencies.
+- [PercentSplitETH.sol](./contracts/PercentSplitETH.sol) and any of its dependencies.
+- [mocks/\*](./contracts/mocks)
+- External libraries:
+  - [`@openzeppelin/*`](<(https://openzeppelin.com/contracts/)>)
+  - [`@manifoldxyz/*`](https://royaltyregistry.xyz/)
+
+Any issues or improvements on how we integrate with the contracts above is in scope.
+
+## Mixins
+
+In order to maintain readability as our contracts grow in complexity, we separate responsibilities into different abstract contracts which we call 'mixins'. We try not to create too many interdependencies between mixins, shared logic may be defined in `NFTDropMarketCore` so mixins do not need to call each other directly.
+
+## Upgrades
+
+Our new factory and NFT drop market contracts will be upgradeable proxies allowing us to add more features overtime. For an overview of the upgrade pattern, refer to the [OpenZeppelin documentation](https://docs.openzeppelin.com/upgrades-plugins/1.x/writing-upgradeable).
+
+## FETH ERC-20 token
+
+[FETH](https://etherscan.io/address/0x49128cf8abe9071ee24540a296b5ded3f9d50443#readProxyContract) is an [ERC-20 token](https://eips.ethereum.org/EIPS/eip-20) modeled after [WETH9](https://etherscan.io/address/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2#code). It has the ability to lockup tokens for 24-25 hours - during this time they may not be transferred or withdrawn, except by our market contract which requested the lockup in the first place.
+
+Since after lockups expire, FETH is just another wrapped ETH token contract - we allow using your available FETH balance to mint from a NFT drop collection.
+
+Note that both FETH and Offers have been [audited](https://code4rena.com/reports/2022-02-foundation) in a previous C4 contest and have been live on mainnet for ~4 months.
+
+## Sizes
+
+| Contract Name                                                                                   | Source Lines of Code | Purpose                                                                                                                       |
+| ----------------------------------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| [**NFTDropMarket**](./contracts/NFTDropMarket.sol)                                              | 61                   | The main / top-level contract for all drop market tools on Foundation.                                                        |
+| [Constants](./contracts/mixins/shared/Constants.sol)                                            | 10                   | Shared constant values used by various mixins.                                                                                |
+| [FETHNode](./contracts/mixins/shared/FETHNode.sol)                                              | 36                   | A wrapper for communicating with the FETH contract.                                                                           |
+| [FoundationTreasuryNode](./contracts/mixins/shared/FoundationTreasuryNode.sol)                  | 34                   | A wrapper for communicating with the treasury contract which collects Foundation fees and defines the admin & operator roles. |
+| [Gap10000](./contracts/mixins/shared/Gap10000.sol)                                              | 4                    | A placeholder contract leaving room for new mixins to be added to the future.                                                 |
+| [MarketFees](./contracts/mixins/shared/MarketFees.sol)                                          | 285                  | Distributes revenue from sales.                                                                                               |
+| [BytesLibrary](./contracts/libraries/BytesLibrary.sol)                                          | 30                   | A library for manipulation of byte arrays.                                                                                    |
+| [ArrayLibrary](./contracts/libraries/ArrayLibrary.sol)                                          | 17                   | Helper functions for arrays.                                                                                                  |
+| [MarketSharedCore](./contracts/mixins/shared/MarketSharedCore.sol)                              | 8                    | A base class for Foundation market contracts to define functions that other market contract may implement or extend.          |
+| [NFTDropMarketCore](./contracts/mixins/nftDropMarket/NFTDropMarketCore.sol)                     | 5                    | A base class for the drop specific market contract to define functions that other mixins may implement or extend.             |
+| [NFTDropMarketFixedPriceSale](./contracts/mixins/nftDropMarket/NFTDropMarketFixedPriceSale.sol) | 137                  | Allows creators to list a drop collection for sale at a fixed price point.                                                    |
+| [**NFTCollectionFactory** ](./contracts/NFTCollectionFactory.sol)                               | 169                  | A factory to create NFT collections.                                                                                          |
+| [AddressLibrary](./contracts/libraries/AddressLibrary.sol)                                      | 12                   | A library for address helpers not already covered by the OZ library library.                                                  |
+| [**NFTDropCollection**](./contracts/NFTDropCollection.sol)                                      | 129                  | A contract to batch mint and reveal a collection of NFTs.                                                                     |
+| [ContractFactory](./contracts/mixins/shared/ContractFactory.sol)                                | 15                   | Stores a reference to the factory which is used to create contract proxies. (shared across all collection types)              |
+| [AdminRole](./contracts/mixins/roles/AdminRole.sol)                                             | 22                   | Defines a role for admin accounts.                                                                                            |
+| [MinterRole](./contracts/mixins/roles/MinterRole.sol)                                           | 23                   | Defines a role for minter accounts.                                                                                           |
+| [CollectionRoyalties](./contracts/mixins/collections/CollectionRoyalties.sol)                   | 41                   | Defines various royalty APIs for broad marketplace support. (shared across all collection types)                              |
+| [SequentialMintCollection](./contracts/mixins/collections/SequentialMintCollection.sol)         | 47                   | Extends the OZ ERC721 implementation for collections which mint sequential token IDs. (shared across all collection types)    |
+| [**NFTCollection**](./contracts/NFTCollection.sol)                                              | 133                  | A collection of NFTs by a single creator.                                                                                     |
+| **Total**                                                                                       | 1228                 |
+
+# Tests
+
+## Hardhat tests:
+
+Setup:
+
+```bash
+yarn
+yarn build
+```
+
+Test:
+
+```bash
+yarn test
+```
+
+(run `yarn build` again if ABIs have changed)
+
+The tests in this repo are not our full test suite. We have simplified what was included here to clearly demonstrate core features and interactions; however, they still do a good job in covering most cases.
+
+Troubleshooting:
+
+- If you get `Error: Lock file is already being held` you can try again, deleting ./cache sometimes helps as well. Finding a fix for this common occurrence would be a high value QA issue :)
+- [Hardhat Tracer](https://github.com/zemse/hardhat-tracer) is included to help with debugging, e.g. run `yarn test --logs` (or --trace, --fulltrace).
+- The test suite takes awhile to run, when testing for something specific execute just that file with `yarn test path/to/test.ts` e.g. `yarn test test/NFTDropMarket/fixedPrice/drop.ts --logs`. And/or update an `it` test to `it.only(...`.
+
+### Gas Testing
+
+The Hardhat gas reporter will print gas usage when running tests. We also have included a custom report we use to measure gas costs for the core scenarios we are interested in. When submitting optimizations, it would be most helpful to us if you communicate the impact in terms of the diff to the [gas-stories.txt](./gas-stories.txt) file your recommendation would create.
+
+```bash
+yarn test-gas-stories
+```
+
+### Coverage
+
+Most, but not all, of our tests have been added to this repo. If you run the coverage report you'll see pretty good coverage. Note that our private repo has 100% coverage, what's included here has been simplified a bit to remove some out of scope contracts and as a result coverage is not perfect here.
+
+```bash
+yarn coverage
+```
+
+After running this command, you'll need to re-run `yarn build`.
+
+To view the report, open `coverage/index.html` in your browser.
+
+## Forge tests:
+
+See [test/foundry/FixedPriceDrop.sol](./test/foundry/FixedPriceDrop.sol) for an example you can build on to probe for issues.
+
+Setup:
+
+```bash
+git submodule update --init --recursive --remote
+yarn
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
+
+Test:
+
+```bash
+forge test
+```
+
+# Slither
+
+We have run the default detectors with Slither, posted the output along with our responses to each. Please do not submit these findings unless you have reason to believe our responses here are not valid.
+
+> Responses use quote replies like this.
+
+- [NFTDropCollection](./slither/NFTDropCollection.md)
+- [NFTCollection](./slither/NFTCollection.md)
+- [NFTCollectionFactory](./slither/NFTCollectionFactory.md)
+
+Slither throws an error when trying to run against the NFTDropMarket, so those results are not posted.
