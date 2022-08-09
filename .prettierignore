@@ -1,0 +1,16 @@
+# folders
+artifacts/
+build/
+cache/
+coverage/
+dist/
+docs/
+lib/
+node_modules/
+typechain-types/
+src/typechain/
+.vscode/
+deployments/
+
+# files
+coverage.json
