@@ -88,7 +88,7 @@ Our new factory and NFT drop market contracts will be upgradeable proxies allowi
 
 Since after lockups expire, FETH is just another wrapped ETH token contract - we allow using your available FETH balance to mint from a NFT drop collection.
 
-Note that both FETH and Offers have been [audited](https://code4rena.com/reports/2022-02-foundation) in a previous C4 contest and have been live on mainnet for ~4 months.
+Note that both FETH have been [audited](https://code4rena.com/reports/2022-02-foundation) in a previous C4 contest and have been live on mainnet for ~4 months.
 
 # Tests
 
