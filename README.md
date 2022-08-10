@@ -173,4 +173,4 @@ We have run the default detectors with Slither, posted the output along with our
 
 Note: Slither currently crashes on the `try/catch` blocks in our code. In order to generate these results, we temporarily removed the `try/catch` blocks.
 
-You can use the [`slither` branch](https://github.com/code-423n4/2022-08-foundation/tree/slither) in this repo to run Slither locally. This code has been modified to allow Slither to run locally [with minimal changes](https://github.com/code-423n4/2022-08-foundation/compare/main..slither), but the changes are not part of this contest and some tests may fail on that branch -- please validate your findings against the `main` branch before submitting!
+You can use the [`slither` branch](https://github.com/code-423n4/2022-08-foundation/tree/slither) in this repo to run Slither locally. This code has been modified to allow Slither to run locally [with minimal changes](https://github.com/code-423n4/2022-08-foundation/compare/main..slither), but the changes are not part of this contest and we removed mocks so tests will not run on that branch -- please validate your findings against the `main` branch before submitting!
