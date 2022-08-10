@@ -11,8 +11,8 @@ Impact: High
 Confidence: High
 
 - [ ] ID-0
-      [NFTDropCollection](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L28-L305) is an upgradeable contract that does not protect its initiliaze functions: [INFTDropCollectionInitializer.initialize(address,string,string,string,bytes32,uint32,address,address)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/interfaces/INFTDropCollectionInitializer.sol#L6-L15)[NFTDropCollection.initialize(address,string,string,string,bytes32,uint32,address,address)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L120-L152). Anyone can delete the contract with: [NFTDropCollection.selfDestruct()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L209-L211)
-      https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L28-L305
+      [NFTDropCollection](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L28-L305) is an upgradeable contract that does not protect its initiliaze functions: [INFTDropCollectionInitializer.initialize(address,string,string,string,bytes32,uint32,address,address)](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/interfaces/INFTDropCollectionInitializer.sol#L6-L15)[NFTDropCollection.initialize(address,string,string,string,bytes32,uint32,address,address)](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L120-L152). Anyone can delete the contract with: [NFTDropCollection.selfDestruct()](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L209-L211)
+      https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L28-L305
 
 > The template is initialized by the factory when `adminUpdateNFTDropCollectionImplementation` is called and instances are initialized by the factory when `createNFTDropCollection` is used to create them. So we are not vulnerable here.
 
@@ -22,9 +22,9 @@ Impact: Low
 Confidence: Medium
 
 - [ ] ID-1
-      [NFTDropCollection.mintCountTo(uint16,address)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L171-L187) should emit an event for: - [latestTokenId = latestTokenId + count](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L178)
+      [NFTDropCollection.mintCountTo(uint16,address)](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L171-L187) should emit an event for: - [latestTokenId = latestTokenId + count](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L178)
 
-https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropCollection.sol#L171-L187
+https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTDropCollection.sol#L171-L187
 
 > This information is implicitly available from the most recent mint event (`Transfer` where from is address(0)).
 

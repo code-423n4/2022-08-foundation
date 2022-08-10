@@ -11,8 +11,8 @@ Impact: High
 Confidence: High
 
 - [ ] ID-0
-      [NFTCollection](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTCollection.sol#L28-L338) is an upgradeable contract that does not protect its initiliaze functions: [INFTCollectionInitializer.initialize(address,string,string)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/interfaces/INFTCollectionInitializer.sol#L6-L10)[NFTCollection.initialize(address,string,string)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTCollection.sol#L105-L112). Anyone can delete the contract with: [NFTCollection.selfDestruct()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTCollection.sol#L230-L232)
-      https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTCollection.sol#L28-L338
+      [NFTCollection](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTCollection.sol#L28-L338) is an upgradeable contract that does not protect its initiliaze functions: [INFTCollectionInitializer.initialize(address,string,string)](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/interfaces/INFTCollectionInitializer.sol#L6-L10)[NFTCollection.initialize(address,string,string)](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTCollection.sol#L105-L112). Anyone can delete the contract with: [NFTCollection.selfDestruct()](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTCollection.sol#L230-L232)
+      https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/NFTCollection.sol#L28-L338
 
 > The template is initialized by the factory when `adminUpdateNFTCollectionImplementation` is called and instances are initialized by the factory when `createNFTCollection` is used to create them. So we are not vulnerable here.
 
@@ -22,9 +22,9 @@ Impact: Informational
 Confidence: Medium
 
 - [ ] ID-1
-      [AddressLibrary.callAndReturnContractAddress(CallWithoutValue)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/AddressLibrary.sol#L34-L39) is never used and should be removed
+      [AddressLibrary.callAndReturnContractAddress(CallWithoutValue)](https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/libraries/AddressLibrary.sol#L34-L39) is never used and should be removed
 
-https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/AddressLibrary.sol#L34-L39
+https://github.com/code-423n4/2022-08-foundation/blob/main/contracts/libraries/AddressLibrary.sol#L34-L39
 
 > Invalid. This is just a result of how I updated the repo in order to generate these results.
 
