@@ -14,6 +14,7 @@ abstract contract ContractFactory {
 
   /**
    * @notice The address of the factory which was used to create this contract.
+   * @return The factory contract address.
    */
   address public immutable contractFactory;
 

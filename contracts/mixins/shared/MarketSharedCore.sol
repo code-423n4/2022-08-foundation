@@ -13,6 +13,9 @@ import "./FETHNode.sol";
 abstract contract MarketSharedCore is FETHNode {
   /**
    * @notice Checks who the seller for an NFT is if listed in this market.
+   * @param nftContract The address of the NFT contract.
+   * @param tokenId The id of the NFT.
+   * @return seller The seller which listed this NFT for sale, or address(0) if not listed.
    */
   function getSellerOf(address nftContract, uint256 tokenId) external view returns (address payable seller) {
     return _getSellerOf(nftContract, tokenId);

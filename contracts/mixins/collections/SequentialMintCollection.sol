@@ -15,17 +15,21 @@ abstract contract SequentialMintCollection is ITokenCreator, Initializable, ERC7
   /**
    * @notice The creator/owner of this NFT collection.
    * @dev This is the default royalty recipient if an different `paymentAddress` was not provided.
+   * @return The collection's creator/owner address.
    */
   address payable public owner;
 
   /**
    * @notice The tokenId of the most recently created NFT.
    * @dev Minting starts at tokenId 1. Each mint will use this value + 1.
+   * @return The most recently minted tokenId, or 0 if no NFTs have been minted yet.
    */
   uint32 public latestTokenId;
 
   /**
    * @notice The max tokenId which can be minted.
+   * @dev This max may be less than the final `totalSupply` if 1 or more tokens were burned.
+   * @return The max tokenId which can be minted.
    */
   uint32 public maxTokenId;
 
@@ -38,15 +42,15 @@ abstract contract SequentialMintCollection is ITokenCreator, Initializable, ERC7
   /****** End of storage ******/
 
   /**
-   * @notice Emitted when the max tokenId supported by this collection is defined.
+   * @notice Emitted when the max tokenId supported by this collection is updated.
    * @param maxTokenId The new max tokenId. All NFTs in this collection will have a tokenId less than
    * or equal to this value.
    */
   event MaxTokenIdUpdated(uint256 indexed maxTokenId);
 
   /**
-   * @notice Emitted when this collection is self destructed by the owner.
-   * @param admin A collection admin at the time this collection was self destructed.
+   * @notice Emitted when this collection is self destructed by the creator/owner/admin.
+   * @param admin The account which requested this contract be self destructed.
    */
   event SelfDestruct(address indexed admin);
 
@@ -97,9 +101,8 @@ abstract contract SequentialMintCollection is ITokenCreator, Initializable, ERC7
   }
 
   /**
-   * @notice Returns the creator of this NFT collection.
+   * @inheritdoc ITokenCreator
    * @dev The tokenId param is ignored since all NFTs return the same value.
-   * @return creator The creator of this collection.
    */
   function tokenCreator(
     uint256 /* tokenId */
@@ -108,9 +111,9 @@ abstract contract SequentialMintCollection is ITokenCreator, Initializable, ERC7
   }
 
   /**
-   * @notice Count of NFTs tracked by this contract.
+   * @notice Returns the total amount of tokens stored by the contract.
    * @dev From the ERC-721 enumerable standard.
-   * @return supply The total number of NFTs still tracked by this contract.
+   * @return supply The total number of NFTs tracked by this contract.
    */
   function totalSupply() public view returns (uint256 supply) {
     unchecked {

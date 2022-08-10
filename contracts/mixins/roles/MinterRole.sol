@@ -12,6 +12,10 @@ import "./AdminRole.sol";
  * @dev Wraps a role from OpenZeppelin's AccessControl for easy integration.
  */
 abstract contract MinterRole is Initializable, AccessControlUpgradeable, AdminRole {
+  /**
+   * @notice The `role` type used for approve minters.
+   * @return `keccak256("MINTER_ROLE")`
+   */
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   modifier onlyMinterOrAdmin() {
@@ -25,8 +29,8 @@ abstract contract MinterRole is Initializable, AccessControlUpgradeable, AdminRo
   }
 
   /**
-   * @notice Adds the account to the list of approved minters.
-   * @dev Only callable by admins as enforced by `grantRole`.
+   * @notice Adds an account as an approved minter.
+   * @dev Only callable by admins, as enforced by `grantRole`.
    * @param account The address to be approved.
    */
   function grantMinter(address account) external {
@@ -34,9 +38,9 @@ abstract contract MinterRole is Initializable, AccessControlUpgradeable, AdminRo
   }
 
   /**
-   * @notice Removes the account from the list of approved minters.
-   * @dev Only callable by admins as enforced by `revokeRole`.
-   * @param account The address to be removed from the approved list.
+   * @notice Removes an account from the set of approved minters.
+   * @dev Only callable by admins, as enforced by `revokeRole`.
+   * @param account The address to be removed.
    */
   function revokeMinter(address account) external {
     revokeRole(MINTER_ROLE, account);

@@ -57,7 +57,7 @@ import "./mixins/shared/Gap10000.sol";
 /**
  * @title A factory to create NFT collections.
  * @notice Call this factory to create a batch mint and reveal collection.
- * @dev This creates and initializes an ERC-1165 minimal proxy pointing to a NFT collection contract template.
+ * @dev This creates and initializes an ERC-1165 minimal proxy pointing to a NFT collection contract implementation.
  */
 contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
   using AddressUpgradeable for address;
@@ -66,25 +66,31 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
 
   /****** Slot 0 (after inheritance) ******/
   /**
-   * @notice The address of the template all new NFTCollections will leverage.
+   * @notice The address of the implementation all new NFTCollections will leverage.
+   * @dev When this is changed, `versionNFTCollection` is incremented.
+   * @return The implementation address for NFTCollection.
    */
   address public implementationNFTCollection;
 
   /**
    * @notice The implementation version of new NFTCollections.
-   * @dev This is auto-incremented each time the implementation is changed.
+   * @dev This is auto-incremented each time `implementationNFTCollection` is changed.
+   * @return The current NFTCollection implementation version.
    */
   uint32 public versionNFTCollection;
 
   /****** Slot 1 ******/
   /**
-   * @notice The address of the template all new NFTDropCollections will leverage.
+   * @notice The address of the implementation all new NFTDropCollections will leverage.
+   * @dev When this is changed, `versionNFTDropCollection` is incremented.
+   * @return The implementation address for NFTDropCollection.
    */
   address public implementationNFTDropCollection;
 
   /**
    * @notice The implementation version of new NFTDropCollections.
-   * @dev This is auto-incremented each time the implementation is changed.
+   * @dev This is auto-incremented each time `implementationNFTDropCollection` is changed.
+   * @return The current NFTDropCollection implementation version.
    */
   uint32 public versionNFTDropCollection;
 
@@ -92,19 +98,20 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
 
   /**
    * @notice The contract address which manages common roles.
-   * @dev Used by the NFTCollections for a shared operator definition.
+   * @dev Defines a centralized admin role definition for permissioned functions below.
+   * @return The contract address with role definitions.
    */
   IRoles public immutable rolesContract;
 
   /**
-   * @notice Emitted when the implementation NFTCollection used by new collections is updated.
+   * @notice Emitted when the implementation of NFTCollection used by new collections is updated.
    * @param implementation The new implementation contract address.
    * @param version The version of the new implementation, auto-incremented.
    */
   event ImplementationNFTCollectionUpdated(address indexed implementation, uint256 indexed version);
 
   /**
-   * @notice Emitted when the implementation contract used by new collections is updated.
+   * @notice Emitted when the implementation of NFTDropCollection used by new collections is updated.
    * @param implementationNFTDropCollection The new implementation contract address.
    * @param version The version of the new implementation, auto-incremented.
    */
@@ -133,24 +140,25 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
   );
 
   /**
-   * @notice Emitted when a new NFTDropCollection collection is created from this factory.
-   * @param collection The address of the new NFTDropCollection contract.
+   * @notice Emitted when a new NFTDropCollection is created from this factory.
+   * @param collection The address of the new NFT drop collection contract.
    * @param creator The address of the creator which owns the new collection.
-   * @param additionalMinter An additional address to grant MINTER_ROLE.
-   * used to define the address of the collection.
-   * @param name The name of the collection contract created.
-   * @param symbol The symbol of the collection contract created.
+   * @param approvedMinter An optional address to grant the MINTER_ROLE.
+   * @param name The collection's `name`.
+   * @param symbol The collection's `symbol`.
    * @param baseURI The base URI for the collection.
    * @param postRevealBaseURIHash The hash of the revealed baseURI for the collection.
-   * @param maxTokenId The max token id for this collection.
-   * @param paymentAddress The address to send the proceeds of the drop.
+   * Set to bytes32(0) if the content is revealed by default (note that revealed content is immutable).
+   * If the post reveal content is unknown, use bytes32(uint(1)) to indicate the `baseURI` is pre-reveal content.
+   * @param maxTokenId The max `tokenID` for this collection.
+   * @param paymentAddress The address that will receive royalties and mint payments.
    * @param version The implementation version used by the new NFTDropCollection collection.
-   * @param nonce The nonce used by the creator when creating the collection,
+   * @param nonce The nonce used by the creator to create this collection.
    */
   event NFTDropCollectionCreated(
     address indexed collection,
     address indexed creator,
-    address indexed additionalMinter,
+    address indexed approvedMinter,
     string name,
     string symbol,
     string baseURI,
@@ -178,6 +186,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
 
   /**
    * @notice Initializer called after contract creation.
+   * @dev This is used so that this factory will resume versions from where our original factory had left off.
    * @param _versionNFTCollection The current implementation version for NFTCollections.
    */
   function initialize(uint32 _versionNFTCollection) external initializer {
@@ -185,7 +194,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
   }
 
   /**
-   * @notice Allows Foundation to change the collection implementation used for future collections.
+   * @notice Allows Foundation to change the NFTCollection implementation used for future collections.
    * This call will auto-increment the version.
    * Existing collections are not impacted.
    * @param _implementation The new NFTCollection collection implementation address.
@@ -201,7 +210,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
     // The implementation is initialized when assigned so that others may not claim it as their own.
     INFTCollectionInitializer(_implementation).initialize(
       payable(address(rolesContract)),
-      string.concat("NFT Collection Template v", versionNFTCollection.toString()),
+      string.concat("NFT Collection Implementation v", versionNFTCollection.toString()),
       string.concat("NFTv", versionNFTCollection.toString())
     );
 
@@ -209,7 +218,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
   }
 
   /**
-   * @notice Allows Foundation to change the collection implementation used for future collections.
+   * @notice Allows Foundation to change the NFTDropCollection implementation used for future collections.
    * This call will auto-increment the version.
    * Existing collections are not impacted.
    * @param _implementation The new NFTDropCollection collection implementation address.
@@ -227,9 +236,9 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
     // The implementation is initialized when assigned so that others may not claim it as their own.
     INFTDropCollectionInitializer(_implementation).initialize(
       payable(address(this)),
-      string.concat("NFT Drop Collection Template v", versionNFTDropCollection.toString()),
+      string.concat("NFT Drop Collection Implementation v", versionNFTDropCollection.toString()),
       string.concat("NFTDropV", versionNFTDropCollection.toString()),
-      "ipfs://QmdB9mCxSsbybucRqtbBGGZf88pSoaJnuQ25FS3GJQvVAx/nft.png",
+      "ipfs://bafybeibvxnuaqtvaxu26gdgly2rm4g2piu7b2tqlx2dsz6wwhqbey2gddy/",
       0x1337000000000000000000000000000000000000000000000000000000001337,
       1,
       address(0),
@@ -239,12 +248,11 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
 
   /**
    * @notice Create a new collection contract.
-   * @dev The nonce is required and must be unique for the msg.sender + implementation version,
-   * otherwise this call will revert.
-   * @param name The name for the new collection being created.
-   * @param symbol The symbol for the new collection being created.
-   * @param nonce An arbitrary value used to allow a creator to mint multiple collections.
-   * @return collection The address of the new collection contract.
+   * @dev The nonce must be unique for the msg.sender + implementation version, otherwise this call will revert.
+   * @param name The collection's `name`.
+   * @param symbol The collection's `symbol`.
+   * @param nonce An arbitrary value used to allow a creator to mint multiple collections with a counterfactual address.
+   * @return collection The address of the newly created collection contract.
    */
   function createNFTCollection(
     string calldata name,
@@ -262,18 +270,18 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
   }
 
   /**
-   * @notice Create a new collection contract.
-   * @dev The nonce is required and must be unique for the msg.sender + implementation version,
-   * otherwise this call will revert.
-   * @param name The name for the new collection being created.
-   * @param symbol The symbol for the new collection being created.
+   * @notice Create a new drop collection contract.
+   * @dev The nonce must be unique for the msg.sender + implementation version, otherwise this call will revert.
+   * @param name The collection's `name`.
+   * @param symbol The collection's `symbol`.
    * @param baseURI The base URI for the collection.
-   * @param postRevealBaseURIHash The hash of the revealed baseURI for the collection,
-   * leave empty for collection revealed by default.
+   * @param postRevealBaseURIHash The hash of the revealed baseURI for the collection.
+   * Set to bytes32(0) if the content is revealed by default (note that revealed content is immutable).
+   * If the post reveal content is unknown, use bytes32(uint(1)) to indicate the `baseURI` is pre-reveal content.
    * @param maxTokenId The max token id for this collection.
-   * @param additionalMinter An optional address to grant the MINTER_ROLE.
-   * @param nonce An arbitrary value used to allow a creator to mint multiple collections.
-   * @return collection The address of the new NFTDropCollection collection contract.
+   * @param approvedMinter An optional address to grant the MINTER_ROLE.
+   * @param nonce An arbitrary value used to allow a creator to mint multiple collections with a counterfactual address.
+   * @return collection The address of the newly created collection contract.
    */
   function createNFTDropCollection(
     string calldata name,
@@ -281,7 +289,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
     string calldata baseURI,
     bytes32 postRevealBaseURIHash,
     uint32 maxTokenId,
-    address additionalMinter,
+    address approvedMinter,
     uint256 nonce
   ) external returns (address collection) {
     return
@@ -291,17 +299,27 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
         baseURI,
         postRevealBaseURIHash,
         maxTokenId,
-        additionalMinter,
+        approvedMinter,
         payable(0),
         nonce
       );
   }
 
   /**
-   * @notice Create a new collection contract with a custom payment address.
+   * @notice Create a new drop collection contract with a custom payment address.
+   * @dev All params other than `paymentAddress` are the same as in `createNFTDropCollection`.
+   * The nonce must be unique for the msg.sender + implementation version, otherwise this call will revert.
+   * @param name The collection's `name`.
+   * @param symbol The collection's `symbol`.
+   * @param baseURI The base URI for the collection.
+   * @param postRevealBaseURIHash The hash of the revealed baseURI for the collection.
+   * Set to bytes32(0) if the content is revealed by default (note that revealed content is immutable).
+   * If the post reveal content is unknown, use bytes32(uint(1)) to indicate the `baseURI` is pre-reveal content.
+   * @param maxTokenId The max token id for this collection.
+   * @param approvedMinter An optional address to grant the MINTER_ROLE.
+   * @param nonce An arbitrary value used to allow a creator to mint multiple collections with a counterfactual address.
    * @param paymentAddress The address that will receive royalties and mint payments.
-   * Notes:
-   *   a) For rest of `params` see `createNFTDropCollection` above.
+   * @return collection The address of the newly created collection contract.
    */
   function createNFTDropCollectionWithPaymentAddress(
     string calldata name,
@@ -309,7 +327,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
     string calldata baseURI,
     bytes32 postRevealBaseURIHash,
     uint32 maxTokenId,
-    address additionalMinter,
+    address approvedMinter,
     uint256 nonce,
     address payable paymentAddress
   ) external returns (address collection) {
@@ -320,17 +338,27 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
         baseURI,
         postRevealBaseURIHash,
         maxTokenId,
-        additionalMinter,
+        approvedMinter,
         paymentAddress != msg.sender ? paymentAddress : payable(0),
         nonce
       );
   }
 
   /**
-   * @notice Create a new collection contract with a custom payment address derived from the factory.
+   * @notice Create a new drop collection contract with a custom payment address derived from the factory.
+   * @dev All params other than `paymentAddressFactoryCall` are the same as in `createNFTDropCollection`.
+   * The nonce must be unique for the msg.sender + implementation version, otherwise this call will revert.
+   * @param name The collection's `name`.
+   * @param symbol The collection's `symbol`.
+   * @param baseURI The base URI for the collection.
+   * @param postRevealBaseURIHash The hash of the revealed baseURI for the collection.
+   * Set to bytes32(0) if the content is revealed by default (note that revealed content is immutable).
+   * If the post reveal content is unknown, use bytes32(uint(1)) to indicate the `baseURI` is pre-reveal content.
+   * @param maxTokenId The max token id for this collection.
+   * @param approvedMinter An optional address to grant the MINTER_ROLE.
+   * @param nonce An arbitrary value used to allow a creator to mint multiple collections with a counterfactual address.
    * @param paymentAddressFactoryCall The contract call which will return the address to use for payments.
-   * Notes:
-   *   a) For rest of `params` see `createNFTDropCollection` above.
+   * @return collection The address of the newly created collection contract.
    */
   function createNFTDropCollectionWithPaymentFactory(
     string calldata name,
@@ -338,7 +366,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
     string calldata baseURI,
     bytes32 postRevealBaseURIHash,
     uint32 maxTokenId,
-    address additionalMinter,
+    address approvedMinter,
     uint256 nonce,
     CallWithoutValue memory paymentAddressFactoryCall
   ) external returns (address collection) {
@@ -349,7 +377,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
         baseURI,
         postRevealBaseURIHash,
         maxTokenId,
-        additionalMinter,
+        approvedMinter,
         AddressLibrary.callAndReturnContractAddress(paymentAddressFactoryCall),
         nonce
       );
@@ -361,7 +389,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
     string calldata baseURI,
     bytes32 postRevealBaseURIHash,
     uint32 maxTokenId,
-    address additionalMinter,
+    address approvedMinter,
     address payable paymentAddress,
     uint256 nonce
   ) private returns (address collection) {
@@ -375,14 +403,14 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
       baseURI,
       postRevealBaseURIHash,
       maxTokenId,
-      additionalMinter,
+      approvedMinter,
       paymentAddress
     );
 
     emit NFTDropCollectionCreated(
       collection,
       msg.sender,
-      additionalMinter,
+      approvedMinter,
       name,
       symbol,
       baseURI,
@@ -398,7 +426,7 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
    * @notice Returns the address of a collection given the current implementation version, creator, and nonce.
    * This will return the same address whether the collection has already been created or not.
    * @param creator The creator of the collection.
-   * @param nonce An arbitrary value used to allow a creator to mint multiple collections.
+   * @param nonce An arbitrary value used to allow a creator to mint multiple collections with a counterfactual address.
    * @return collection The address of the collection contract that would be created by this nonce.
    */
   function predictNFTCollectionAddress(address creator, uint256 nonce) external view returns (address collection) {
@@ -410,9 +438,8 @@ contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {
    * implementation version, creator, and nonce.
    * This will return the same address whether the collection has already been created or not.
    * @param creator The creator of the collection.
-   * @param nonce An arbitrary value used to allow a creator to mint multiple collections.
-   * @return collection The address of the NFTDropCollection contract
-   * that would be created by this nonce.
+   * @param nonce An arbitrary value used to allow a creator to mint multiple collections with a counterfactual address.
+   * @return collection The address of the collection contract that would be created by this nonce.
    */
   function predictNFTDropCollectionAddress(address creator, uint256 nonce) external view returns (address collection) {
     collection = implementationNFTDropCollection.predictDeterministicAddress(_getSalt(creator, nonce));

@@ -16,10 +16,7 @@ import "../shared/Constants.sol";
  */
 abstract contract CollectionRoyalties is IGetRoyalties, IGetFees, IRoyaltyInfo, ITokenCreator, ERC165Upgradeable {
   /**
-   * @notice Returns an array of recipient addresses to which royalties for secondary sales should be sent.
-   * The expected royalty amount is communicated with `getFeeBps`.
-   * @param tokenId The tokenId of the NFT to get the royalty recipients for.
-   * @return recipients An array of addresses to which royalties should be sent.
+   * @inheritdoc IGetFees
    */
   function getFeeRecipients(uint256 tokenId) external view returns (address payable[] memory recipients) {
     recipients = new address payable[](1);
@@ -27,49 +24,43 @@ abstract contract CollectionRoyalties is IGetRoyalties, IGetFees, IRoyaltyInfo, 
   }
 
   /**
-   * @notice Returns an array of royalties to be sent for secondary sales in basis points.
-   * The expected recipients is communicated with `getFeeRecipients`.
+   * @inheritdoc IGetFees
    * @dev The tokenId param is ignored since all NFTs return the same value.
-   * @return feesInBasisPoints The array of fees to be sent to each recipient, in basis points.
    */
   function getFeeBps(
     uint256 /* tokenId */
-  ) external pure returns (uint256[] memory feesInBasisPoints) {
-    feesInBasisPoints = new uint256[](1);
-    feesInBasisPoints[0] = ROYALTY_IN_BASIS_POINTS;
+  ) external pure returns (uint256[] memory royaltiesInBasisPoints) {
+    royaltiesInBasisPoints = new uint256[](1);
+    royaltiesInBasisPoints[0] = ROYALTY_IN_BASIS_POINTS;
   }
 
   /**
-   * @notice Returns an array of royalties to be sent for secondary sales.
-   * @dev The data is the same as when calling getFeeRecipients and getFeeBps separately.
-   * @param tokenId The tokenId of the NFT to get the royalties for.
-   * @return recipients An array of addresses to which royalties should be sent.
-   * @return feesInBasisPoints The array of fees to be sent to each recipient address.
+   * @inheritdoc IGetRoyalties
    */
   function getRoyalties(uint256 tokenId)
     external
     view
-    returns (address payable[] memory recipients, uint256[] memory feesInBasisPoints)
+    returns (address payable[] memory recipients, uint256[] memory royaltiesInBasisPoints)
   {
     recipients = new address payable[](1);
     recipients[0] = getTokenCreatorPaymentAddress(tokenId);
-    feesInBasisPoints = new uint256[](1);
-    feesInBasisPoints[0] = ROYALTY_IN_BASIS_POINTS;
+    royaltiesInBasisPoints = new uint256[](1);
+    royaltiesInBasisPoints[0] = ROYALTY_IN_BASIS_POINTS;
   }
 
   /**
-   * @notice The address to pay the proceeds/royalties for the collection.
+   * @notice The address to pay the creator proceeds/royalties for the collection.
+   * @param tokenId The ID of the NFT to get the creator payment address for.
+   * @return creatorPaymentAddress The address to which royalties should be paid.
    */
-  function getTokenCreatorPaymentAddress(
-    uint256 /* tokenId */
-  ) public view virtual returns (address payable);
+  function getTokenCreatorPaymentAddress(uint256 tokenId)
+    public
+    view
+    virtual
+    returns (address payable creatorPaymentAddress);
 
   /**
-   * @notice Returns the receiver and the amount to be sent for a secondary sale.
-   * @param tokenId The tokenId of the NFT to get the royalty recipient and amount for.
-   * @param salePrice The total price of the sale.
-   * @return receiver The royalty recipient address for this sale.
-   * @return royaltyAmount The total amount that should be sent to the `receiver`.
+   * @inheritdoc IRoyaltyInfo
    */
   function royaltyInfo(uint256 tokenId, uint256 salePrice)
     external
@@ -83,7 +74,7 @@ abstract contract CollectionRoyalties is IGetRoyalties, IGetFees, IRoyaltyInfo, 
   }
 
   /**
-   * @inheritdoc ERC165Upgradeable
+   * @inheritdoc IERC165Upgradeable
    * @dev Checks the supported royalty interfaces.
    */
   function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool interfaceSupported) {

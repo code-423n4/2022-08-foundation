@@ -7,13 +7,14 @@ pragma solidity ^0.8.12;
  * For more see: https://eips.ethereum.org/EIPS/eip-2981.
  */
 interface IRoyaltyInfo {
-  /// @notice Called with the sale price to determine how much royalty
-  //          is owed and to whom.
-  /// @param _tokenId - the NFT asset queried for royalty information
-  /// @param _salePrice - the sale price of the NFT asset specified by _tokenId
-  /// @return receiver - address of who should be sent the royalty payment
-  /// @return royaltyAmount - the royalty payment amount for _salePrice
-  function royaltyInfo(uint256 _tokenId, uint256 _salePrice)
+  /**
+   * @notice Get the creator royalties to be sent.
+   * @param tokenId The ID of the NFT to get royalties for.
+   * @param salePrice The total price of the sale.
+   * @return receiver The address to which royalties should be sent.
+   * @return royaltyAmount The total amount that should be sent to the `receiver`.
+   */
+  function royaltyInfo(uint256 tokenId, uint256 salePrice)
     external
     view
     returns (address receiver, uint256 royaltyAmount);

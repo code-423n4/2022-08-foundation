@@ -71,8 +71,8 @@ describe("NFTCollection", () => {
     const fees = await nft.getRoyalties(1);
     expect(fees.recipients.length).to.eq(1);
     expect(fees.recipients[0]).to.eq(creator.address);
-    expect(fees.feesInBasisPoints.length).to.eq(1);
-    expect(fees.feesInBasisPoints[0]).to.eq(1000); // 10% to the creator
+    expect(fees.royaltiesInBasisPoints.length).to.eq(1);
+    expect(fees.royaltiesInBasisPoints[0]).to.eq(1000); // 10% to the creator
   });
 
   it("baseURI defaults to ipfs://", async () => {

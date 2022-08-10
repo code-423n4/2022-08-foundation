@@ -97,10 +97,10 @@ contract NFTCollection is
   {}
 
   /**
-   * @notice Called by the factory on creation.
-   * @param _creator The creator of this collection contract.
-   * @param _name The name of this collection.
-   * @param _symbol The symbol for this collection.
+   * @notice Called by the contract factory on creation.
+   * @param _creator The creator of this collection.
+   * @param _name The collection's `name`.
+   * @param _symbol The collection's `symbol`.
    */
   function initialize(
     address payable _creator,
@@ -112,16 +112,18 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the creator to burn if they currently own the NFT.
-   * @param tokenId The tokenId of the NFT to burn.
+   * @notice Allows the creator to burn a specific token if they currently own the NFT.
+   * @param tokenId The ID of the NFT to burn.
+   * @dev The function here asserts `onlyCreator` while the super confirms ownership.
    */
   function burn(uint256 tokenId) public override onlyCreator {
     super.burn(tokenId);
   }
 
   /**
-   * @notice Allows the owner to mint an NFT defined by its metadata path.
-   * @param tokenCID The CID of the NFT to mint.
+   * @notice Mint an NFT defined by its metadata path.
+   * @dev This is only callable by the collection creator/owner.
+   * @param tokenCID The CID for the metadata json of the NFT to mint.
    * @return tokenId The tokenId of the newly minted NFT.
    */
   function mint(string calldata tokenCID) external returns (uint256 tokenId) {
@@ -129,11 +131,12 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the owner to mint and sets approval for all for the provided operator.
-   * @dev This can be used by creators the first time they mint an NFT to save having to issue a separate approval
-   * transaction before starting an auction.
-   * @param tokenCID The CID of the NFT to mint.
-   * @param operator The address to set as the operator for this collection contract.
+   * @notice Mint an NFT defined by its metadata path and approves the provided operator address.
+   * @dev This is only callable by the collection creator/owner.
+   * It can be used the first time they mint to save having to issue a separate approval
+   * transaction before listing the NFT for sale.
+   * @param tokenCID The CID for the metadata json of the NFT to mint.
+   * @param operator The address to set as an approved operator for the creator's account.
    * @return tokenId The tokenId of the newly minted NFT.
    */
   function mintAndApprove(string calldata tokenCID, address operator) external returns (uint256 tokenId) {
@@ -142,8 +145,9 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the owner to mint an NFT and have creator revenue/royalties sent to an alternate address.
-   * @param tokenCID The CID of the NFT to mint.
+   * @notice Mint an NFT defined by its metadata path and have creator revenue/royalties sent to an alternate address.
+   * @dev This is only callable by the collection creator/owner.
+   * @param tokenCID The CID for the metadata json of the NFT to mint.
    * @param tokenCreatorPaymentAddress The royalty recipient address to use for this NFT.
    * @return tokenId The tokenId of the newly minted NFT.
    */
@@ -158,13 +162,13 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the owner to mint an NFT and have creator revenue/royalties sent to an alternate address.
-   * Also sets approval for all for the provided operator.
-   * @dev This can be used by creators the first time they mint an NFT to save having to issue a separate approval
-   * transaction before starting an auction.
-   * @param tokenCID The CID of the NFT to mint.
+   * @notice Mint an NFT defined by its metadata path and approves the provided operator address.
+   * @dev This is only callable by the collection creator/owner.
+   * It can be used the first time they mint to save having to issue a separate approval
+   * transaction before listing the NFT for sale.
+   * @param tokenCID The CID for the metadata json of the NFT to mint.
    * @param tokenCreatorPaymentAddress The royalty recipient address to use for this NFT.
-   * @param operator The address to set as the operator for this collection contract.
+   * @param operator The address to set as an approved operator for the creator's account.
    * @return tokenId The tokenId of the newly minted NFT.
    */
   function mintWithCreatorPaymentAddressAndApprove(
@@ -177,9 +181,10 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the owner to mint an NFT and have creator revenue/royalties sent to an alternate address
+   * @notice Mint an NFT defined by its metadata path and have creator revenue/royalties sent to an alternate address
    * which is defined by a contract call, typically a proxy contract address representing the payment terms.
-   * @param tokenCID The CID of the NFT to mint.
+   * @dev This is only callable by the collection creator/owner.
+   * @param tokenCID The CID for the metadata json of the NFT to mint.
    * @param paymentAddressFactory The contract to call which will return the address to use for payments.
    * @param paymentAddressCallData The call details to sent to the factory provided.
    * @return tokenId The tokenId of the newly minted NFT.
@@ -196,15 +201,15 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the owner to mint an NFT and have creator revenue/royalties sent to an alternate address
+   * @notice Mint an NFT defined by its metadata path and have creator revenue/royalties sent to an alternate address
    * which is defined by a contract call, typically a proxy contract address representing the payment terms.
-   * Also sets approval for all for the provided operator.
-   * @dev This can be used by creators the first time they mint an NFT to save having to issue a separate approval
-   * transaction before starting an auction.
-   * @param tokenCID The CID of the NFT to mint.
+   * @dev This is only callable by the collection creator/owner.
+   * It can be used the first time they mint to save having to issue a separate approval
+   * transaction before listing the NFT for sale.
+   * @param tokenCID The CID for the metadata json of the NFT to mint.
    * @param paymentAddressFactory The contract to call which will return the address to use for payments.
    * @param paymentAddressCallData The call details to sent to the factory provided.
-   * @param operator The address to set as the operator for this collection contract.
+   * @param operator The address to set as an approved operator for the creator's account.
    * @return tokenId The tokenId of the newly minted NFT.
    */
   function mintWithCreatorPaymentFactoryAndApprove(
@@ -218,8 +223,9 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Allows the collection owner to destroy this contract only if
-   * no NFTs have been minted yet.
+   * @notice Allows the collection creator to destroy this contract only if
+   * no NFTs have been minted yet or the minted NFTs have been burned.
+   * @dev Once destructed, a new collection could be deployed to this address (although that's discouraged).
    */
   function selfDestruct() external onlyCreator {
     _selfDestruct();
@@ -239,6 +245,7 @@ contract NFTCollection is
    * @notice Allows the owner to set a max tokenID.
    * This provides a guarantee to collectors about the limit of this collection contract, if applicable.
    * @dev Once this value has been set, it may be decreased but can never be increased.
+   * This max may be less than the final `totalSupply` if 1 or more tokens were burned.
    * @param _maxTokenId The max tokenId to set, all NFTs must have a tokenId less than or equal to this value.
    */
   function updateMaxTokenId(uint32 _maxTokenId) external onlyCreator {
@@ -267,8 +274,10 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Get the base URI used for all NFTs in this collection.
-   * @return uri The base URI.
+   * @notice The base URI used for all NFTs in this collection.
+   * @dev The `tokenCID` is appended to this to obtain an NFT's `tokenURI`.
+   *      e.g. The URI for a token with the `tokenCID`: "foo" and `baseURI`: "ipfs://" is "ipfs://foo".
+   * @return uri The base URI used by this collection.
    */
   function baseURI() external view returns (string memory uri) {
     uri = _baseURI();
@@ -284,26 +293,22 @@ contract NFTCollection is
   }
 
   /**
-   * @notice Returns the desired payment address to be used for any transfers to the creator.
-   * @dev The payment address may be assigned for each individual NFT, if not defined the collection owner is returned.
-   * @param tokenId The tokenId of the NFT to get the royalties for.
-   * @return tokenCreatorPaymentAddress The address to use for royalty payments for sales of this NFT.
+   * @inheritdoc CollectionRoyalties
    */
   function getTokenCreatorPaymentAddress(uint256 tokenId)
     public
     view
     override
-    returns (address payable tokenCreatorPaymentAddress)
+    returns (address payable creatorPaymentAddress)
   {
-    tokenCreatorPaymentAddress = tokenIdToCreatorPaymentAddress[tokenId];
-    if (tokenCreatorPaymentAddress == address(0)) {
-      tokenCreatorPaymentAddress = owner;
+    creatorPaymentAddress = tokenIdToCreatorPaymentAddress[tokenId];
+    if (creatorPaymentAddress == address(0)) {
+      creatorPaymentAddress = owner;
     }
   }
 
   /**
-   * @inheritdoc ERC165Upgradeable
-   * @dev No-op to avoid compile errors.
+   * @inheritdoc IERC165Upgradeable
    */
   function supportsInterface(bytes4 interfaceId)
     public
@@ -311,13 +316,12 @@ contract NFTCollection is
     override(ERC165Upgradeable, ERC721Upgradeable, CollectionRoyalties)
     returns (bool interfaceSupported)
   {
+    // This is a no-op function required to avoid compile errors.
     interfaceSupported = super.supportsInterface(interfaceId);
   }
 
   /**
-   * @notice A distinct URI to the asset for a given NFT.
-   * @param tokenId The tokenId of the NFT to get the URI for.
-   * @return uri The URI for this NFT.
+   * @inheritdoc IERC721MetadataUpgradeable
    */
   function tokenURI(uint256 tokenId) public view override returns (string memory uri) {
     require(_exists(tokenId), "NFTCollection: URI query for nonexistent token");

@@ -21,8 +21,8 @@ abstract contract AdminRole is Initializable, AccessControlUpgradeable {
   }
 
   /**
-   * @notice Adds the account to the list of approved admins.
-   * @dev Only callable by admins as enforced by `grantRole`.
+   * @notice Adds an account as an approved admin.
+   * @dev Only callable by existing admins, as enforced by `grantRole`.
    * @param account The address to be approved.
    */
   function grantAdmin(address account) external {
@@ -30,9 +30,9 @@ abstract contract AdminRole is Initializable, AccessControlUpgradeable {
   }
 
   /**
-   * @notice Removes the account from the list of approved admins.
-   * @dev Only callable by admins as enforced by `revokeRole`.
-   * @param account The address to be removed from the approved list.
+   * @notice Removes an account from the set of approved admins.
+   * @dev Only callable by existing admins, as enforced by `revokeRole`.
+   * @param account The address to be removed.
    */
   function revokeAdmin(address account) external {
     revokeRole(DEFAULT_ADMIN_ROLE, account);

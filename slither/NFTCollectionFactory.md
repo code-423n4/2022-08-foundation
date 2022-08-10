@@ -28,7 +28,7 @@ Impact: Low
 Confidence: Medium
 
 - [ ] Reentrancy in [NFTCollectionFactory.adminUpdateNFTCollectionImplementation(address)](contracts/NFTCollectionFactory.sol#L193-L209):
-      External calls: - [INFTCollectionInitializer(\_implementation).initialize(address(address(rolesContract)),string.concat(NFT Collection Template v,versionNFTCollection.toString()),string.concat(NFTv,versionNFTCollection.toString()))](contracts/NFTCollectionFactory.sol#L202-L206)
+      External calls: - [INFTCollectionInitializer(\_implementation).initialize(address(address(rolesContract)),string.concat(NFT Collection Implementation v,versionNFTCollection.toString()),string.concat(NFTv,versionNFTCollection.toString()))](contracts/NFTCollectionFactory.sol#L202-L206)
       Event emitted after the call(s): - [ImplementationNFTCollectionUpdated(\_implementation,versionNFTCollection)](contracts/NFTCollectionFactory.sol#L208)
 
 contracts/NFTCollectionFactory.sol#L193-L209
@@ -36,8 +36,8 @@ contracts/NFTCollectionFactory.sol#L193-L209
 > As an admin only call and an external call only to a contract we have written, we are not vulnerable to reentrancy here.
 
 - [ ] Reentrancy in [NFTCollectionFactory.\_createNFTDropCollection(string,string,string,bytes32,uint32,address,address,uint256)](contracts/NFTCollectionFactory.sol#L358-L395):
-      External calls: - [INFTDropCollectionInitializer(collection).initialize(address(msg.sender),name,symbol,baseURI,postRevealBaseURIHash,maxTokenId,additionalMinter,paymentAddress)](contracts/NFTCollectionFactory.sol#L371-L380)
-      Event emitted after the call(s): - [NFTDropCollectionCreated(collection,msg.sender,additionalMinter,name,symbol,baseURI,postRevealBaseURIHash,maxTokenId,paymentAddress,versionNFTDropCollection,nonce)](contracts/NFTCollectionFactory.sol#L382-L394)
+      External calls: - [INFTDropCollectionInitializer(collection).initialize(address(msg.sender),name,symbol,baseURI,postRevealBaseURIHash,maxTokenId,approvedMinter,paymentAddress)](contracts/NFTCollectionFactory.sol#L371-L380)
+      Event emitted after the call(s): - [NFTDropCollectionCreated(collection,msg.sender,approvedMinter,name,symbol,baseURI,postRevealBaseURIHash,maxTokenId,paymentAddress,versionNFTDropCollection,nonce)](contracts/NFTCollectionFactory.sol#L382-L394)
 
 contracts/NFTCollectionFactory.sol#L358-L395
 
@@ -70,7 +70,7 @@ Confidence: High
 Impact: Informational
 Confidence: Medium
 
-- [ ] [NFTCollectionFactory.adminUpdateNFTDropCollectionImplementation(address)](contracts/NFTCollectionFactory.sol#L217-L238) uses literals with too many digits: - [INFTDropCollectionInitializer(\_implementation).initialize(address(address(this)),string.concat(NFT Drop Collection Template v,versionNFTDropCollection.toString()),string.concat(NFTDropV,versionNFTDropCollection.toString()),ipfs://QmdB9mCxSsbybucRqtbBGGZf88pSoaJnuQ25FS3GJQvVAx/nft.png,0x1337000000000000000000000000000000000000000000000000000000001337,1,address(0),address(0))](contracts/NFTCollectionFactory.sol#L228-L237)
+- [ ] [NFTCollectionFactory.adminUpdateNFTDropCollectionImplementation(address)](contracts/NFTCollectionFactory.sol#L217-L238) uses literals with too many digits: - [INFTDropCollectionInitializer(\_implementation).initialize(address(address(this)),string.concat(NFT Drop Collection Implementation v,versionNFTDropCollection.toString()),string.concat(NFTDropV,versionNFTDropCollection.toString()),ipfs://QmdB9mCxSsbybucRqtbBGGZf88pSoaJnuQ25FS3GJQvVAx/nft.png,0x1337000000000000000000000000000000000000000000000000000000001337,1,address(0),address(0))](contracts/NFTCollectionFactory.sol#L228-L237)
 
 contracts/NFTCollectionFactory.sol#L217-L238
 

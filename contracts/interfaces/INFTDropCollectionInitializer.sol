@@ -10,7 +10,7 @@ interface INFTDropCollectionInitializer {
     string calldata _baseURI,
     bytes32 _postRevealBaseURIHash,
     uint32 _maxTokenId,
-    address _additionalMinter,
+    address _approvedMinter,
     address payable _paymentAddress
   ) external;
 }

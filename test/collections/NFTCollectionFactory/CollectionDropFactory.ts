@@ -337,7 +337,7 @@ describe("CollectionDropFactory", () => {
       const symbol = await template.symbol();
       expect(symbol).to.eq("NFTDropV1");
       const name = await template.name();
-      expect(name).to.eq("NFT Drop Collection Template v1");
+      expect(name).to.eq("NFT Drop Collection Implementation v1");
     });
 
     describe("On change implementation", () => {
@@ -370,7 +370,7 @@ describe("CollectionDropFactory", () => {
         const symbol = await newTemplate.symbol();
         expect(symbol).to.eq("NFTDropV2");
         const name = await newTemplate.name();
-        expect(name).to.eq("NFT Drop Collection Template v2");
+        expect(name).to.eq("NFT Drop Collection Implementation v2");
       });
     });
   });
@@ -473,7 +473,7 @@ describe("CollectionDropFactory", () => {
 
       it("New implementation has been initialized", async () => {
         const name = await newImplementation.name();
-        expect(name).to.eq("NFT Collection Template v2");
+        expect(name).to.eq("NFT Collection Implementation v2");
         const symbol = await newImplementation.symbol();
         expect(symbol).to.eq("NFTv2");
       });
