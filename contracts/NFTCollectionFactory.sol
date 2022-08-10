@@ -56,7 +56,7 @@ import "./mixins/shared/Gap10000.sol";
 
 /**
  * @title A factory to create NFT collections.
- * @notice Call this factory to create a batch mint and reveal collection.
+ * @notice Call this factory to create NFT collections.
  * @dev This creates and initializes an ERC-1165 minimal proxy pointing to a NFT collection contract implementation.
  */
 contract NFTCollectionFactory is ICollectionFactory, Initializable, Gap10000 {

@@ -5,7 +5,6 @@ Summary
 - [uninitialized-storage](#uninitialized-storage) (2 results) (High)
 - [divide-before-multiply](#divide-before-multiply) (1 results) (Medium)
 - [uninitialized-local](#uninitialized-local) (1 results) (Medium)
-- [shadowing-local](#shadowing-local) (4 results) (Low)
 - [reentrancy-events](#reentrancy-events) (3 results) (Low)
 - [assembly](#assembly) (2 results) (Informational)
 - [solc-version](#solc-version) (22 results) (Informational)
@@ -13,20 +12,21 @@ Summary
 - [naming-convention](#naming-convention) (10 results) (Informational)
 - [unused-state](#unused-state) (4 results) (Informational)
 - [constable-states](#constable-states) (2 results) (Optimization)
-- [external-function](#external-function) (1 results) (Optimization)
 
 ## uninitialized-storage
 
 Impact: High
 Confidence: High
 
-- [ ] [MarketFees.\_getFees(address,uint256,address,uint256,address).\_recipients_scope_0](contracts/mixins/shared/MarketFees.sol#L379) is a storage variable never initialized
+- [ ] ID-0
+      [MarketFees.\_getFees(address,uint256,address,uint256,address).\_recipients_scope_0](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L435) is a storage variable never initialized
 
-contracts/mixins/shared/MarketFees.sol#L379
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L435
 
-- [ ] [MarketFees.\_getFees(address,uint256,address,uint256,address).\_splitPerRecipientInBasisPoints_scope_1](contracts/mixins/shared/MarketFees.sol#L379) is a storage variable never initialized
+- [ ] ID-1
+      [MarketFees.\_getFees(address,uint256,address,uint256,address).\_splitPerRecipientInBasisPoints_scope_1](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L436) is a storage variable never initialized
 
-contracts/mixins/shared/MarketFees.sol#L379
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L436
 
 > Invalid. These are not storage variables, they are `memory` variables initialized and only used inline.
 
@@ -35,9 +35,10 @@ contracts/mixins/shared/MarketFees.sol#L379
 Impact: Medium
 Confidence: Medium
 
-- [ ] [MarketFees.\_getFees(address,uint256,address,uint256,address)](contracts/mixins/shared/MarketFees.sol#L342-L470) performs a multiplication on the result of a division: -[creatorRev = price / CREATOR_ROYALTY_DENOMINATOR](contracts/mixins/shared/MarketFees.sol#L411) -[royalty = (creatorRev \* creatorShares[i_scope_2]) / totalShares](contracts/mixins/shared/MarketFees.sol#L444)
+- [ ] ID-2
+      [MarketFees.\_getFees(address,uint256,address,uint256,address)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L391-L530) performs a multiplication on the result of a division: -[creatorRev = price / CREATOR_ROYALTY_DENOMINATOR](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L471) -[royalty = (creatorRev \* creatorShares[i_scope_2]) / totalShares](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L504)
 
-contracts/mixins/shared/MarketFees.sol#L342-L470
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L391-L530
 
 > Valid -- however the value here is in ETH so rounding errors should be minimal. We intentionally favor the first creator listed if a rounding error does occur. Due to the complexity of the code here, we will not be making further adjustments to the logic here to minimize rounding at this time.
 
@@ -46,9 +47,10 @@ contracts/mixins/shared/MarketFees.sol#L342-L470
 Impact: Medium
 Confidence: Medium
 
-- [ ] [MarketFees.\_getFees(address,uint256,address,uint256,address).totalShares](contracts/mixins/shared/MarketFees.sol#L421) is a local variable never initialized
+- [ ] ID-3
+      [MarketFees.\_getFees(address,uint256,address,uint256,address).totalShares](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L481) is a local variable never initialized
 
-contracts/mixins/shared/MarketFees.sol#L421
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L481
 
 > The default state of `0` is valid when logic does not flow into the `if` block which may assign a different value.
 
@@ -57,23 +59,26 @@ contracts/mixins/shared/MarketFees.sol#L421
 Impact: Low
 Confidence: Medium
 
-- [ ] Reentrancy in [MarketFees.\_distributeFunds(address,uint256,address,uint256,address)](contracts/mixins/shared/MarketFees.sol#L98-L153):
-      External calls: - [\_sendValueWithFallbackWithdraw(seller,sellerRev,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L139) - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47) - [\_sendValueWithFallbackWithdraw(getFoundationTreasury(),totalFees,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L142) - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47) - [\_sendValueWithFallbackWithdraw(buyReferrer,buyReferrerFee,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L146) - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47)
-      Event emitted after the call(s): - [BuyReferralPaid(nftContract,tokenId,buyReferrer,buyReferrerFee,0)](contracts/mixins/shared/MarketFees.sol#L147) - [WithdrawalToFETH(user,amount)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L48) - [\_sendValueWithFallbackWithdraw(buyReferrer,buyReferrerFee,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L146)
+- [ ] ID-4
+      Reentrancy in [MarketFees.\_distributeFunds(address,uint256,address,uint256,address)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L98-L153):
+      External calls: - [\_sendValueWithFallbackWithdraw(seller,sellerRev,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L139) - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47) - [\_sendValueWithFallbackWithdraw(getFoundationTreasury(),totalFees,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L142) - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47) - [\_sendValueWithFallbackWithdraw(buyReferrer,buyReferrerFee,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L146) - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47)
+      Event emitted after the call(s): - [BuyReferralPaid(nftContract,tokenId,buyReferrer,buyReferrerFee,0)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L147) - [WithdrawalToFETH(user,amount)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L48) - [\_sendValueWithFallbackWithdraw(buyReferrer,buyReferrerFee,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L146)
 
-contracts/mixins/shared/MarketFees.sol#L98-L153
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L98-L153
 
-- [ ] Reentrancy in [SendValueWithFallbackWithdraw.\_sendValueWithFallbackWithdraw(address,uint256,uint256)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50):
-      External calls: - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47)
-      Event emitted after the call(s): - [WithdrawalToFETH(user,amount)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L48)
+- [ ] ID-5
+      Reentrancy in [SendValueWithFallbackWithdraw.\_sendValueWithFallbackWithdraw(address,uint256,uint256)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50):
+      External calls: - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47)
+      Event emitted after the call(s): - [WithdrawalToFETH(user,amount)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L48)
 
-contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50
 
-- [ ] Reentrancy in [MarketFees.\_distributeFunds(address,uint256,address,uint256,address)](contracts/mixins/shared/MarketFees.sol#L98-L153):
-      External calls: - [\_sendValueWithFallbackWithdraw(seller,sellerRev,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L139) - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47) - [\_sendValueWithFallbackWithdraw(getFoundationTreasury(),totalFees,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L142) - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47)
-      Event emitted after the call(s): - [WithdrawalToFETH(user,amount)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L48) - [\_sendValueWithFallbackWithdraw(getFoundationTreasury(),totalFees,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](contracts/mixins/shared/MarketFees.sol#L142)
+- [ ] ID-6
+      Reentrancy in [MarketFees.\_distributeFunds(address,uint256,address,uint256,address)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L98-L153):
+      External calls: - [\_sendValueWithFallbackWithdraw(seller,sellerRev,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L139) - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47) - [\_sendValueWithFallbackWithdraw(getFoundationTreasury(),totalFees,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L142) - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44) - [feth.depositFor{value: amount}(user)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L47)
+      Event emitted after the call(s): - [WithdrawalToFETH(user,amount)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L48) - [\_sendValueWithFallbackWithdraw(getFoundationTreasury(),totalFees,SEND_VALUE_GAS_LIMIT_SINGLE_RECIPIENT)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L142)
 
-contracts/mixins/shared/MarketFees.sol#L98-L153
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L98-L153
 
 > Most of the instances here are events that are based on the results of an external call. In those scenarios, we cannot fix the reported issue here. For the `BuyReferralPaid` event we are opted not to fix in order to keep the code simple and easy to follow -- we do not believe the values emitted are at risk due to reentrancy.
 
@@ -82,13 +87,15 @@ contracts/mixins/shared/MarketFees.sol#L98-L153
 Impact: Informational
 Confidence: High
 
-- [ ] [ArrayLibrary.capLength(address[],uint256)](contracts/libraries/ArrayLibrary.sol#L13-L19) uses assembly - [INLINE ASM](contracts/libraries/ArrayLibrary.sol#L15-L17)
+- [ ] ID-7
+      [ArrayLibrary.capLength(address[],uint256)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/ArrayLibrary.sol#L13-L19) uses assembly - [INLINE ASM](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/ArrayLibrary.sol#L15-L17)
 
-contracts/libraries/ArrayLibrary.sol#L13-L19
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/ArrayLibrary.sol#L13-L19
 
-- [ ] [ArrayLibrary.capLength(uint256[],uint256)](contracts/libraries/ArrayLibrary.sol#L25-L31) uses assembly - [INLINE ASM](contracts/libraries/ArrayLibrary.sol#L27-L29)
+- [ ] ID-8
+      [ArrayLibrary.capLength(uint256[],uint256)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/ArrayLibrary.sol#L25-L31) uses assembly - [INLINE ASM](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/ArrayLibrary.sol#L27-L29)
 
-contracts/libraries/ArrayLibrary.sol#L25-L31
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/libraries/ArrayLibrary.sol#L25-L31
 
 > We have a very limited amount of assembly included. These are working around a limitation in Solidity. Any issues with this code would be in scope.
 
@@ -104,15 +111,15 @@ Confidence: High
 Impact: Informational
 Confidence: High
 
-- [ ] Low level call in [OZERC165Checker.supportsERC165InterfaceUnchecked(address,bytes4)](contracts/mixins/shared/OZERC165Checker.sol#L32-L37): - [(success,result) = account.staticcall{gas: 30000}(encodedParams)](contracts/mixins/shared/OZERC165Checker.sol#L34)
+- [ ] ID-31
+      Low level call in [OZERC165Checker.supportsERC165InterfaceUnchecked(address,bytes4)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/OZERC165Checker.sol#L32-L37): - [(success,result) = account.staticcall{gas: 30000}(encodedParams)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/OZERC165Checker.sol#L34)
 
-contracts/mixins/shared/OZERC165Checker.sol#L32-L37
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/OZERC165Checker.sol#L32-L37
 
-> This implementation is a clone of the yet to be released [OpenZeppelin helper](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/introspection/ERC165Checker.sol#L107). We believe the low level call used here is safe, but any counter examples would be in scope for this contest.
+- [ ] ID-32
+      Low level call in [SendValueWithFallbackWithdraw.\_sendValueWithFallbackWithdraw(address,uint256,uint256)](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50): - [(success) = user.call{gas: gasLimit,value: amount}()](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44)
 
-- [ ] Low level call in [SendValueWithFallbackWithdraw.\_sendValueWithFallbackWithdraw(address,uint256,uint256)](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50): - [(success) = user.call{gas: gasLimit,value: amount}()](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L44)
-
-contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L34-L50
 
 > We intentionally use a low level call here, in order to use more than the default amount of gas for sending value. We are not using the OpenZeppelin `sendValue` helper here in order to put a cap on the max amount of gas the call may consume.
 
@@ -128,21 +135,25 @@ Confidence: High
 Impact: Informational
 Confidence: High
 
-- [ ] [FoundationTreasuryNode.\_\_gap_was_treasury](contracts/mixins/shared/FoundationTreasuryNode.sol#L22) is never used in [NFTDropMarket](contracts/NFTDropMarket.sol#L63-L143)
+- [ ] ID-43
+      [FoundationTreasuryNode.\_\_gap_was_treasury](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/FoundationTreasuryNode.sol#L22) is never used in [NFTDropMarket](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropMarket.sol#L63-L151)
 
-contracts/mixins/shared/FoundationTreasuryNode.sol#L22
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/FoundationTreasuryNode.sol#L22
 
-- [ ] [SendValueWithFallbackWithdraw.\_\_gap_was_pendingWithdrawals](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20) is never used in [NFTDropMarket](contracts/NFTDropMarket.sol#L63-L143)
+- [ ] ID-44
+      [SendValueWithFallbackWithdraw.\_\_gap_was_pendingWithdrawals](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20) is never used in [NFTDropMarket](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropMarket.sol#L63-L151)
 
-contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20
 
-- [ ] [NFTDropMarketFixedPriceSale.\_\_gap](contracts/mixins/nftDropMarket/NFTDropMarketFixedPriceSale.sol#L299) is never used in [NFTDropMarket](contracts/NFTDropMarket.sol#L63-L143)
+- [ ] ID-45
+      [NFTDropMarketFixedPriceSale.\_\_gap](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/nftDropMarket/NFTDropMarketFixedPriceSale.sol#L313) is never used in [NFTDropMarket](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropMarket.sol#L63-L151)
 
-contracts/mixins/nftDropMarket/NFTDropMarketFixedPriceSale.sol#L299
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/nftDropMarket/NFTDropMarketFixedPriceSale.sol#L313
 
-- [ ] MarketFees.\_\_gap_was_fees](contracts/mixins/shared/MarketFees.sol#L42) is never used in [NFTDropMarket](contracts/NFTDropMarket.sol#L63-L143)
+- [ ] ID-46
+      [MarketFees.\_\_gap_was_fees](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L42) is never used in [NFTDropMarket](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropMarket.sol#L63-L151)
 
-contracts/mixins/shared/MarketFees.sol#L42
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/MarketFees.sol#L42
 
 > These `__gap*` variables are reserving space which was used in an older version of one of our contracts. This pattern helps to ensure that we do not read from these slots in the future, getting previously populated data which could distort expected results.
 
@@ -153,12 +164,14 @@ contracts/mixins/shared/MarketFees.sol#L42
 Impact: Optimization
 Confidence: High
 
-- [ ] [FoundationTreasuryNode.\_\_gap_was_treasury](contracts/mixins/shared/FoundationTreasuryNode.sol#L22) should be constant
+- [ ] ID-47
+      [FoundationTreasuryNode.\_\_gap_was_treasury](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/FoundationTreasuryNode.sol#L22) should be constant
 
-contracts/mixins/shared/FoundationTreasuryNode.sol#L22
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/FoundationTreasuryNode.sol#L22
 
-- [ ] [SendValueWithFallbackWithdraw.\_\_gap_was_pendingWithdrawals](contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20) should be constant
+- [ ] ID-48
+      [SendValueWithFallbackWithdraw.\_\_gap_was_pendingWithdrawals](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20) should be constant
 
-contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20
+https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/SendValueWithFallbackWithdraw.sol#L20
 
 > These `__gap` variables are reserving space which was used in an older version of one of our contracts. This pattern helps to ensure that we do not read from these slots in the future, getting previously populated data which could distort expected results.
