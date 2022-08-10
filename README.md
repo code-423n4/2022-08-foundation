@@ -1,4 +1,4 @@
-# Foundation Drops contest details
+# Foundation Drop contest details
 
 - \$38,000 USDC main award pot
 - \$2,000 USDC gas optimization award pot
