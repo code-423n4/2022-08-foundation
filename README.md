@@ -38,7 +38,7 @@ We would like to call out **extra attention** to [`NFTDropMarketFixedPriceSale`]
 
 This is the complete list of what's in scope for this contest:
 
-| Contract Name                                                                                                                                            | Source Lines of Code | Purpose                                                                                                                       |
+| Contract Name                                                                                                                                            | SLOC | Purpose                                                                                                                       |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | [**NFTDropMarket**](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/NFTDropMarket.sol)                                              | 61                   | The main / top-level contract for all drop market tools on Foundation.                                                        |
 | [Constants](https://github.com/code-423n4/2022-08-foundation/tree/main/contracts/mixins/shared/Constants.sol)                                            | 10                   | Shared constant values used by various mixins.                                                                                |
