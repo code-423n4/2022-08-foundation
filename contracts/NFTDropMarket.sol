@@ -112,14 +112,14 @@ contract NFTDropMarket is
     returns (address payable seller)
   {
     // Check the current owner first in case it has been sold.
-    try IERC721(nftContract).ownerOf(tokenId) returns (address owner) {
+    { address owner = IERC721(nftContract).ownerOf(tokenId);
       if (owner != address(0)) {
         // If sold, return address(0) since that owner cannot sell via this market.
         return payable(address(0));
       }
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Fall through
+    
+    
+      
     }
 
     return super._getSellerOf(nftContract, tokenId);
@@ -136,14 +136,14 @@ contract NFTDropMarket is
     returns (address payable sellerOrOwner)
   {
     // Check the current owner first in case it has been sold.
-    try IERC721(nftContract).ownerOf(tokenId) returns (address owner) {
+    { address owner = IERC721(nftContract).ownerOf(tokenId);
       if (owner != address(0)) {
         // Once an NFT has been minted, it cannot be sold through this contract.
         revert NFTDropMarket_NFT_Already_Minted();
       }
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Fall through
+    
+    
+    
     }
 
     return super._getSellerOf(nftContract, tokenId);

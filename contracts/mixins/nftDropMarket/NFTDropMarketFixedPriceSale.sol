@@ -272,13 +272,13 @@ abstract contract NFTDropMarketFixedPriceSale is MarketFees {
       bool marketCanMint
     )
   {
-    try INFTDropCollectionMint(nftContract).numberOfTokensAvailableToMint() returns (uint256 count) {
+    {uint256 count = INFTDropCollectionMint(nftContract).numberOfTokensAvailableToMint();
       if (count != 0) {
-        try IAccessControl(nftContract).hasRole(MINTER_ROLE, address(this)) returns (bool hasRole) {
+        {bool hasRole = IAccessControl(nftContract).hasRole(MINTER_ROLE, address(this));
           marketCanMint = hasRole;
-        } catch {
-          // The contract is not supported - return default values.
-          return (payable(0), 0, 0, 0, false);
+        
+        
+        
         }
 
         FixedPriceSaleConfig memory saleConfig = nftContractToFixedPriceSaleConfig[nftContract];
@@ -288,9 +288,9 @@ abstract contract NFTDropMarketFixedPriceSale is MarketFees {
         numberOfTokensAvailableToMint = count;
       }
       // Else minted completed -- return default values.
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Contract not supported or self destructed - return default values
+    
+    
+    
     }
   }
 

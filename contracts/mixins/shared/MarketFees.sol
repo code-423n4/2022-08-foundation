@@ -235,10 +235,10 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
   {
     // 1st priority: ERC-2981
     if (nftContract.supportsERC165InterfaceUnchecked(type(IRoyaltyInfo).interfaceId)) {
-      try IRoyaltyInfo(nftContract).royaltyInfo{ gas: READ_ONLY_GAS_LIMIT }(tokenId, BASIS_POINTS) returns (
+      {(
         address receiver,
         uint256 royaltyAmount
-      ) {
+      ) = IRoyaltyInfo(nftContract).royaltyInfo{ gas: READ_ONLY_GAS_LIMIT }(tokenId, BASIS_POINTS);
         // Manifold contracts return (address(this), 0) when royalties are not defined
         // - so ignore results when the amount is 0
         if (royaltyAmount > 0) {
@@ -248,24 +248,24 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
           // The split amount is assumed to be 100% when only 1 recipient is returned
           return (recipients, splitPerRecipientInBasisPoints);
         }
-      } catch // solhint-disable-next-line no-empty-blocks
-      {
-        // Fall through
+      
+      
+      
       }
     }
 
     // 2nd priority: getRoyalties
     if (nftContract.supportsERC165InterfaceUnchecked(type(IGetRoyalties).interfaceId)) {
-      try IGetRoyalties(nftContract).getRoyalties{ gas: READ_ONLY_GAS_LIMIT }(tokenId) returns (
+      {(
         address payable[] memory _recipients,
         uint256[] memory recipientBasisPoints
-      ) {
+      ) = IGetRoyalties(nftContract).getRoyalties{ gas: READ_ONLY_GAS_LIMIT }(tokenId);
         if (_recipients.length != 0 && _recipients.length == recipientBasisPoints.length) {
           return (_recipients, recipientBasisPoints);
         }
-      } catch // solhint-disable-next-line no-empty-blocks
-      {
-        // Fall through
+      
+      
+      
       }
     }
   }
@@ -286,9 +286,9 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
     // The registry requires overrides are not 0 and contracts when set.
     // If no override is set, the nftContract address is returned.
 
-    try royaltyRegistry.getRoyaltyLookupAddress{ gas: READ_ONLY_GAS_LIMIT }(nftContract) returns (
+    {(
       address overrideContract
-    ) {
+    ) = royaltyRegistry.getRoyaltyLookupAddress{ gas: READ_ONLY_GAS_LIMIT }(nftContract);
       if (overrideContract != nftContract) {
         nftContract = overrideContract;
 
@@ -296,61 +296,61 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
 
         // 3rd priority: ERC-2981 override
         if (nftContract.supportsERC165InterfaceUnchecked(type(IRoyaltyInfo).interfaceId)) {
-          try IRoyaltyInfo(nftContract).royaltyInfo{ gas: READ_ONLY_GAS_LIMIT }(tokenId, BASIS_POINTS) returns (
+          {(
             address receiver,
-            uint256 /* royaltyAmount */
-          ) {
+            /* royaltyAmount */
+          ) = IRoyaltyInfo(nftContract).royaltyInfo{ gas: READ_ONLY_GAS_LIMIT }(tokenId, BASIS_POINTS);
             recipients = new address payable[](1);
             recipients[0] = payable(receiver);
             splitPerRecipientInBasisPoints = new uint256[](1);
             // The split amount is assumed to be 100% when only 1 recipient is returned
             return (recipients, splitPerRecipientInBasisPoints);
-          } catch // solhint-disable-next-line no-empty-blocks
-          {
-            // Fall through
+          
+          
+          
           }
         }
 
         // 4th priority: getRoyalties override
         if (recipients.length == 0 && nftContract.supportsERC165InterfaceUnchecked(type(IGetRoyalties).interfaceId)) {
-          try IGetRoyalties(nftContract).getRoyalties{ gas: READ_ONLY_GAS_LIMIT }(tokenId) returns (
+          {(
             address payable[] memory _recipients,
             uint256[] memory recipientBasisPoints
-          ) {
+          ) = IGetRoyalties(nftContract).getRoyalties{ gas: READ_ONLY_GAS_LIMIT }(tokenId);
             if (_recipients.length != 0 && _recipients.length == recipientBasisPoints.length) {
               return (_recipients, recipientBasisPoints);
             }
-          } catch // solhint-disable-next-line no-empty-blocks
-          {
-            // Fall through
+          
+          
+          
           }
         }
       }
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Ignore out of gas errors and continue using the nftContract address
+    
+    
+    
     }
 
     // 5th priority: getFee* from contract or override
     if (nftContract.supportsERC165InterfaceUnchecked(type(IGetFees).interfaceId)) {
-      try IGetFees(nftContract).getFeeRecipients{ gas: READ_ONLY_GAS_LIMIT }(tokenId) returns (
+      {(
         address payable[] memory _recipients
-      ) {
+      ) = IGetFees(nftContract).getFeeRecipients{ gas: READ_ONLY_GAS_LIMIT }(tokenId);
         if (_recipients.length != 0) {
-          try IGetFees(nftContract).getFeeBps{ gas: READ_ONLY_GAS_LIMIT }(tokenId) returns (
+          {(
             uint256[] memory recipientBasisPoints
-          ) {
+          ) = IGetFees(nftContract).getFeeBps{ gas: READ_ONLY_GAS_LIMIT }(tokenId);
             if (_recipients.length == recipientBasisPoints.length) {
               return (_recipients, recipientBasisPoints);
             }
-          } catch // solhint-disable-next-line no-empty-blocks
-          {
-            // Fall through
+          
+          
+          
           }
         }
-      } catch // solhint-disable-next-line no-empty-blocks
-      {
-        // Fall through
+      
+      
+      
       }
     }
 
@@ -365,7 +365,7 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
     }
 
     // 7th priority: owner from contract or override
-    try IOwnable(nftContract).owner{ gas: READ_ONLY_GAS_LIMIT }() returns (address owner) {
+    { address owner = IOwnable(nftContract).owner{ gas: READ_ONLY_GAS_LIMIT }();
       if (owner != address(0)) {
         // Only pay the owner if there wasn't another royalty defined
         recipients = new address payable[](1);
@@ -374,9 +374,9 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
         // The split amount is assumed to be 100% when only 1 recipient is returned
         return (recipients, splitPerRecipientInBasisPoints);
       }
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Fall through
+    
+    
+    
     }
 
     // If no valid payment address or creator is found, return 0 recipients
@@ -412,33 +412,33 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
     }
 
     address payable creator;
-    try implementationAddress.internalGetTokenCreator(nftContract, tokenId) returns (address payable _creator) {
+    { address payable _creator = implementationAddress.internalGetTokenCreator(nftContract, tokenId);
       creator = _creator;
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Fall through
+    
+    
+    
     }
 
-    try implementationAddress.internalGetImmutableRoyalties(nftContract, tokenId) returns (
+    {(
       address payable[] memory _recipients,
       uint256[] memory _splitPerRecipientInBasisPoints
-    ) {
+    ) = implementationAddress.internalGetImmutableRoyalties(nftContract, tokenId);
       (creatorRecipients, creatorShares) = (_recipients, _splitPerRecipientInBasisPoints);
-    } catch // solhint-disable-next-line no-empty-blocks
-    {
-      // Fall through
+    
+    
+    
     }
 
     if (creatorRecipients.length == 0) {
       // Check mutable royalties only if we didn't find results from the immutable API
-      try implementationAddress.internalGetMutableRoyalties(nftContract, tokenId, creator) returns (
+      {(
         address payable[] memory _recipients,
         uint256[] memory _splitPerRecipientInBasisPoints
-      ) {
+      ) = implementationAddress.internalGetMutableRoyalties(nftContract, tokenId, creator);
         (creatorRecipients, creatorShares) = (_recipients, _splitPerRecipientInBasisPoints);
-      } catch // solhint-disable-next-line no-empty-blocks
-      {
-        // Fall through
+      
+      
+      
       }
     }
 

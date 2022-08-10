@@ -217,7 +217,7 @@ contract PercentSplitETH is Initializable {
   }
 
   function _splitERC20Tokens(IERC20 erc20Contract) private returns (bool) {
-    try erc20Contract.balanceOf(address(this)) returns (uint256 balance) {
+    {uint256 balance = erc20Contract.balanceOf(address(this));
       if (balance == 0) {
         return false;
       }
@@ -233,23 +233,23 @@ contract PercentSplitETH is Initializable {
           }
           amountToSend /= BASIS_POINTS;
           totalSent += amountToSend;
-          try erc20Contract.transfer(share.recipient, amountToSend) {
+          { erc20Contract.transfer(share.recipient, amountToSend);
             emit ERC20Transferred(address(erc20Contract), share.recipient, amountToSend);
-          } catch {
-            return false;
+          
+            
           }
         }
         // Favor the 1st recipient if there are any rounding issues
         amountToSend = balance - totalSent;
       }
-      try erc20Contract.transfer(_shares[0].recipient, amountToSend) {
+      { erc20Contract.transfer(_shares[0].recipient, amountToSend);
         emit ERC20Transferred(address(erc20Contract), _shares[0].recipient, amountToSend);
-      } catch {
-        return false;
+      
+      
       }
       return true;
-    } catch {
-      return false;
+    
+      
     }
   }
 
