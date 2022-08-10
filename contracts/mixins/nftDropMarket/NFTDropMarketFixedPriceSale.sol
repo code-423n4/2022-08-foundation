@@ -64,7 +64,8 @@ abstract contract NFTDropMarketFixedPriceSale is MarketFees {
   mapping(address => FixedPriceSaleConfig) private nftContractToFixedPriceSaleConfig;
 
   /**
-   * @notice The role definition validating drop collections have granted this market access to Mint.
+   * @notice The `role` type used to validate drop collections have granted this market access to mint.
+   * @return `keccak256("MINTER_ROLE")`
    */
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -87,7 +88,8 @@ abstract contract NFTDropMarketFixedPriceSale is MarketFees {
    * @dev The total price paid by the buyer is `totalFees + creatorRev`.
    * @param nftContract The address of the NFT drop collection.
    * @param buyer The address of the buyer.
-   * @param firstTokenId The id of the first token minted.
+   * @param firstTokenId The tokenId for the first NFT minted.
+   * The other minted tokens are assigned sequentially, so `firstTokenId` - `firstTokenId + count - 1` were minted.
    * @param count The number of NFTs minted.
    * @param totalFees The amount of ETH that was sent to Foundation & referrals for this sale.
    * @param creatorRev The amount of ETH that was sent to the creator for this sale.
@@ -159,8 +161,11 @@ abstract contract NFTDropMarketFixedPriceSale is MarketFees {
    * @param nftContract The address of the NFT drop collection.
    * @param count The number of NFTs to mint.
    * @param buyReferrer The address which referred this purchase, or address(0) if n/a.
+   * @return firstTokenId The tokenId for the first NFT minted.
+   * The other minted tokens are assigned sequentially, so `firstTokenId` - `firstTokenId + count - 1` were minted.
    * @dev This call may revert if the collection has sold out, has an insufficient number of tokens available,
    * or if the market's minter permissions were removed.
+   * If insufficient msg.value is included, the msg.sender's available FETH token balance will be used.
    */
   function mintFromFixedPriceSale(
     address nftContract,
@@ -249,11 +254,12 @@ abstract contract NFTDropMarketFixedPriceSale is MarketFees {
   /**
    * @notice Returns details for a drop collection's fixed price sale.
    * @param nftContract The address of the NFT drop collection.
-   * @dev Notes:
-   *   a) `seller` will return `address(0)` when:
-   *     i) the collection has not been listed.
-   *        - The `numberOfTokensAvailableToMint` will reflect how many could be sold if this collection is listed.
-   *     ii) the collection has sold out.
+   * @return seller The address of the seller which listed this drop for sale.
+   * This value will be address(0) if the collection is not listed or has sold out.
+   * @return price The price per NFT minted.
+   * @return limitPerAccount The max number of NFTs an account may have while minting.
+   * @return numberOfTokensAvailableToMint The total number of NFTs that may still be minted.
+   * @return marketCanMint True if this contract has permissions to mint from the given collection.
    */
   function getFixedPriceSale(address nftContract)
     public

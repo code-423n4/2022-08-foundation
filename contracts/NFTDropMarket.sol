@@ -75,19 +75,19 @@ contract NFTDropMarket is
   /**
    * @notice Set immutable variables for the implementation contract.
    * @dev Using immutable instead of constants allows us to use different values on testnet.
-   * @param treasury The Foundation Treasury contract address.
-   * @param feth The FETH ERC-20 token contract address.
-   * @param royaltyRegistry The Royalty Registry contract address.
+   * @param _treasury The Foundation Treasury contract address.
+   * @param _feth The FETH ERC-20 token contract address.
+   * @param _royaltyRegistry The Royalty Registry contract address.
    */
   constructor(
-    address payable treasury,
-    address feth,
-    address royaltyRegistry
+    address payable _treasury,
+    address _feth,
+    address _royaltyRegistry
   )
-    FoundationTreasuryNode(treasury)
-    FETHNode(feth)
+    FoundationTreasuryNode(_treasury)
+    FETHNode(_feth)
     MarketFees(
-      royaltyRegistry,
+      _royaltyRegistry,
       /*assumePrimarySale=*/
       true
     ) // solhint-disable-next-line no-empty-blocks

@@ -157,7 +157,7 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
    * @param nftContract The address of the NFT contract.
    * @param tokenId The id of the NFT.
    * @param price The sale price to calculate the fees for.
-   * @return totalFees How much will be sent to the Foundation treasury.
+   * @return totalFees How much will be sent to the Foundation treasury and/or referrals.
    * @return creatorRev How much will be sent across all the `creatorRecipients` defined.
    * @return creatorRecipients The addresses of the recipients to receive a portion of the creator fee.
    * @return creatorShares The percentage of the creator fee to be distributed to each `creatorRecipient`.
@@ -201,21 +201,34 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
   }
 
   /**
-   * @notice For internal use only.
+   * @notice Returns the address of the registry allowing for royalty configuration overrides.
+   * @dev See https://royaltyregistry.xyz/
+   * @return registry The address of the royalty registry contract.
+   */
+  function getRoyaltyRegistry() external view returns (address registry) {
+    return address(royaltyRegistry);
+  }
+
+  /**
+   * @notice **For internal use only.**
    * @dev This function is external to allow using try/catch but is not intended for external use.
    * This checks the token creator.
    */
-  function getTokenCreator(address nftContract, uint256 tokenId) external view returns (address payable creator) {
+  function internalGetTokenCreator(address nftContract, uint256 tokenId)
+    external
+    view
+    returns (address payable creator)
+  {
     creator = ITokenCreator(nftContract).tokenCreator{ gas: READ_ONLY_GAS_LIMIT }(tokenId);
   }
 
   /**
-   * @notice For internal use only.
+   * @notice **For internal use only.**
    * @dev This function is external to allow using try/catch but is not intended for external use.
    * If ERC2981 royalties (or getRoyalties) are defined by the NFT contract, allow this standard to define immutable
    * royalties that cannot be later changed via the royalty registry.
    */
-  function getImmutableRoyalties(address nftContract, uint256 tokenId)
+  function internalGetImmutableRoyalties(address nftContract, uint256 tokenId)
     external
     view
     returns (address payable[] memory recipients, uint256[] memory splitPerRecipientInBasisPoints)
@@ -258,12 +271,12 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
   }
 
   /**
-   * @notice For internal use only.
+   * @notice **For internal use only.**
    * @dev This function is external to allow using try/catch but is not intended for external use.
    * This checks for royalties defined in the royalty registry or via a non-standard royalty API.
    */
   // solhint-disable-next-line code-complexity
-  function getMutableRoyalties(
+  function internalGetMutableRoyalties(
     address nftContract,
     uint256 tokenId,
     address payable creator
@@ -370,14 +383,6 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
   }
 
   /**
-   * @notice Returns the address of the registry allowing for royalty configuration overrides.
-   * @return registry The address of the royalty registry contract.
-   */
-  function getRoyaltyRegistry() public view returns (address registry) {
-    return address(royaltyRegistry);
-  }
-
-  /**
    * @notice Calculates how funds should be distributed for the given sale details.
    * @dev When the NFT is being sold by the `tokenCreator`, all the seller revenue will
    * be split with the royalty recipients defined for that NFT.
@@ -407,14 +412,14 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
     }
 
     address payable creator;
-    try implementationAddress.getTokenCreator(nftContract, tokenId) returns (address payable _creator) {
+    try implementationAddress.internalGetTokenCreator(nftContract, tokenId) returns (address payable _creator) {
       creator = _creator;
     } catch // solhint-disable-next-line no-empty-blocks
     {
       // Fall through
     }
 
-    try implementationAddress.getImmutableRoyalties(nftContract, tokenId) returns (
+    try implementationAddress.internalGetImmutableRoyalties(nftContract, tokenId) returns (
       address payable[] memory _recipients,
       uint256[] memory _splitPerRecipientInBasisPoints
     ) {
@@ -426,7 +431,7 @@ abstract contract MarketFees is FoundationTreasuryNode, MarketSharedCore, SendVa
 
     if (creatorRecipients.length == 0) {
       // Check mutable royalties only if we didn't find results from the immutable API
-      try implementationAddress.getMutableRoyalties(nftContract, tokenId, creator) returns (
+      try implementationAddress.internalGetMutableRoyalties(nftContract, tokenId, creator) returns (
         address payable[] memory _recipients,
         uint256[] memory _splitPerRecipientInBasisPoints
       ) {

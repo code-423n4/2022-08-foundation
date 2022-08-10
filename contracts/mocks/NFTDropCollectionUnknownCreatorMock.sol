@@ -11,11 +11,11 @@ contract NFTDropCollectionUnknownCreatorMock is INFTDropCollectionMint, ERC165, 
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bool private sold;
 
-  constructor(address additionalMinter) {
+  constructor(address approvedMinter) {
     _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _grantRole(MINTER_ROLE, msg.sender);
-    if (additionalMinter != address(0)) {
-      _grantRole(MINTER_ROLE, additionalMinter);
+    if (approvedMinter != address(0)) {
+      _grantRole(MINTER_ROLE, approvedMinter);
     }
   }
 

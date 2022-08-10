@@ -10,7 +10,7 @@ type CreateNFTDropCollectionOptionalParams = {
   baseURI?: string;
   postRevealBaseURIHash?: BytesLike;
   maxTokenId?: BigNumberish;
-  additionalMinter?: string;
+  approvedMinter?: string;
   nonce?: BigNumberish;
 };
 
@@ -20,7 +20,7 @@ type CreateNFTDropCollectionRequiredParams = {
   baseURI: string;
   postRevealBaseURIHash: BytesLike;
   maxTokenId: BigNumberish;
-  additionalMinter: string;
+  approvedMinter: string;
   nonce: BigNumberish;
 };
 
@@ -48,7 +48,7 @@ function getDefaultParamsCreateNFTDropCollection(contracts: {
     baseURI: "ipfs://exampleHashOfPreRevealContentDir/",
     postRevealBaseURIHash: ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ipfs://exampleHashOfFinalContentDir/")),
     maxTokenId: 100,
-    additionalMinter: contracts.nftDropMarket.address,
+    approvedMinter: contracts.nftDropMarket.address,
     nonce: BigNumber.from(ethers.utils.randomBytes(32)),
   };
 }
@@ -62,7 +62,7 @@ function getArgsFromParamsCreateNFTDropCollection(
     paramValues.baseURI,
     paramValues.postRevealBaseURIHash,
     paramValues.maxTokenId,
-    paramValues.additionalMinter,
+    paramValues.approvedMinter,
     paramValues.nonce,
   ];
 }
@@ -131,7 +131,7 @@ export async function getEventArgsNFTDropCollectionCreated(
   return [
     predictedCollection,
     creator.address,
-    paramValues.additionalMinter,
+    paramValues.approvedMinter,
     paramValues.name,
     paramValues.symbol,
     paramValues.baseURI,

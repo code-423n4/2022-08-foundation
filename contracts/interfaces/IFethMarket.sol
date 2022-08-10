@@ -28,7 +28,7 @@ interface IFethMarket {
     address unlockFrom,
     uint256 unlockExpiration,
     uint256 unlockAmount,
-    address depositFor,
-    uint256 depositAmount
+    address lockupFor,
+    uint256 lockupAmount
   ) external payable returns (uint256 expiration);
 }

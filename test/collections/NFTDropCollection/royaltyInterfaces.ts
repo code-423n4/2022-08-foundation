@@ -89,8 +89,8 @@ describe("NFTDropCollection / royaltyInterfaces", () => {
     const royalties = await drop.getRoyalties(tokenId);
     expect(royalties.recipients.length).to.eq(1);
     expect(royalties.recipients[0]).to.eq(paymentAddress.address);
-    expect(royalties.feesInBasisPoints.length).to.eq(1);
-    expect(royalties.feesInBasisPoints[0]).to.eq(expectedRoyaltyRateBP);
+    expect(royalties.royaltiesInBasisPoints.length).to.eq(1);
+    expect(royalties.royaltiesInBasisPoints[0]).to.eq(expectedRoyaltyRateBP);
 
     // IRoyaltyInfo
     const royaltyInfo = await drop.royaltyInfo(tokenId, salePrice);

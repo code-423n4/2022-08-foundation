@@ -59,17 +59,17 @@ describe("NFTDropCollection / createNFTDropEvents", () => {
     });
 
     describe("Without minter", () => {
-      const additionalMinter = ethers.constants.AddressZero;
+      const approvedMinter = ethers.constants.AddressZero;
 
       beforeEach(async () => {
         tx = await contracts.nftCollectionFactoryV2
           .connect(creator)
-          .createNFTDropCollection(...getArgsCreateNFTDropCollection(contracts, { nonce, additionalMinter }));
+          .createNFTDropCollection(...getArgsCreateNFTDropCollection(contracts, { nonce, approvedMinter }));
         drop = await getNFTDropCollection(tx);
       });
 
       it("Assert logs", async () => {
-        await assertExpectedLogs({ additionalMinter });
+        await assertExpectedLogs({ approvedMinter });
       });
     });
   });
@@ -92,21 +92,21 @@ describe("NFTDropCollection / createNFTDropEvents", () => {
     });
 
     describe("Without minter", () => {
-      const additionalMinter = ethers.constants.AddressZero;
+      const approvedMinter = ethers.constants.AddressZero;
 
       beforeEach(async () => {
         tx = await contracts.nftCollectionFactoryV2.connect(creator).createNFTDropCollectionWithPaymentAddress(
           ...getArgsCreateNFTDropCollectionWithPaymentAddress(contracts, {
             paymentAddress: paymentAddress.address,
             nonce,
-            additionalMinter,
+            approvedMinter,
           }),
         );
         drop = await getNFTDropCollection(tx);
       });
 
       it("Assert logs", async () => {
-        await assertExpectedLogs({ paymentAddress: paymentAddress.address, additionalMinter });
+        await assertExpectedLogs({ paymentAddress: paymentAddress.address, approvedMinter });
       });
     });
   });
@@ -156,19 +156,19 @@ describe("NFTDropCollection / createNFTDropEvents", () => {
       });
 
       describe("Without minter", () => {
-        const additionalMinter = ethers.constants.AddressZero;
+        const approvedMinter = ethers.constants.AddressZero;
 
         beforeEach(async () => {
           tx = await contracts.nftCollectionFactoryV2
             .connect(creator)
             .createNFTDropCollectionWithPaymentFactory(
-              ...getArgsCreateNFTDropCollectionWithPaymentFactory(contracts, { shares, nonce, additionalMinter }),
+              ...getArgsCreateNFTDropCollectionWithPaymentFactory(contracts, { shares, nonce, approvedMinter }),
             );
           drop = await getNFTDropCollection(tx);
         });
 
         it("Assert logs", async () => {
-          await assertExpectedLogs({ shares, additionalMinter });
+          await assertExpectedLogs({ shares, approvedMinter });
         });
       });
     });
@@ -196,19 +196,19 @@ describe("NFTDropCollection / createNFTDropEvents", () => {
       });
 
       describe("Without minter", () => {
-        const additionalMinter = ethers.constants.AddressZero;
+        const approvedMinter = ethers.constants.AddressZero;
 
         beforeEach(async () => {
           tx = await contracts.nftCollectionFactoryV2
             .connect(creator)
             .createNFTDropCollectionWithPaymentFactory(
-              ...getArgsCreateNFTDropCollectionWithPaymentFactory(contracts, { shares, nonce, additionalMinter }),
+              ...getArgsCreateNFTDropCollectionWithPaymentFactory(contracts, { shares, nonce, approvedMinter }),
             );
           drop = await getNFTDropCollection(tx);
         });
 
         it("Assert logs", async () => {
-          await assertExpectedLogs({ shares, additionalMinter, splitAlreadyCreated });
+          await assertExpectedLogs({ shares, approvedMinter, splitAlreadyCreated });
         });
       });
     });
@@ -218,7 +218,7 @@ describe("NFTDropCollection / createNFTDropEvents", () => {
     paymentAddress?: string;
     splitAlreadyCreated?: boolean;
     shares?: Royalty[];
-    additionalMinter?: string;
+    approvedMinter?: string;
   }): Promise<void> {
     const results: EventLog[] = [];
 
@@ -266,7 +266,7 @@ describe("NFTDropCollection / createNFTDropEvents", () => {
       },
     );
 
-    if (options?.additionalMinter !== ethers.constants.AddressZero) {
+    if (options?.approvedMinter !== ethers.constants.AddressZero) {
       results.push(
         // Grant minter role
         {

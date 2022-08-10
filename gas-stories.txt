@@ -3,10 +3,10 @@ Market
 NFTDropMarketFixedPriceSale
 ···························
 [Collector] Mint
-    134,600 1st mint
-    146,900 1st mint w. buy referrer
-    117,500 2nd mint
-    129,800 2nd mint w. buy referrer
+    134,500 1st mint
+    146,800 1st mint w. buy referrer
+    117,400 2nd mint
+    129,700 2nd mint w. buy referrer
 
 [Collector] Mint Batch
     359,100 1st Mint 10
@@ -15,7 +15,7 @@ NFTDropMarketFixedPriceSale
     354,300 2nd Mint 10 w. buy referrer
 
 createFixedPriceSale
-     73,300 
+     73,400 
 
 NFT
 =========================================================
