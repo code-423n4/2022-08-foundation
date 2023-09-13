@@ -1,0 +1,757 @@
+==============================================================
+Guild: Code4rena
+Channel: ARCHIVE-Q3-2022 / ☑foundation-aug11
+==============================================================
+
+[08/08/2022 7:26 PM] kartoonjoy (pinned)
+👋 Hello and welcome to the contest channel for the $40K USDC **Foundation Drop** contest!
+
+📆 Contest opens 08/11/2022 8:00 PM (20:00 UTC) and runs through 08/15/2022 8:00 PM (20:00 UTC) (4 days).
+
+Please give a warm welcome to the Foundation team, particularly @HardlyDifficult and @batu, who will be available for questions either here in the channel or via DM.
+
+We'll be posting relevant links, documentation, etc. here, so if you intend to participate in this contest, consider enabling notifications for this channel. 🐺 ⏰
+
+Contest Page: https://code4rena.com/contests/2022-08-foundation-drops-contest
+
+{Embed}
+https://code4rena.com/contests/2022-08-foundation-drops-contest
+Code4rena Foundation Drops contest
+$40,000 USDC
+11 August 2022—15 August 2022
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/C4-banner-7C19B.png
+
+{Reactions}
+👋 (6) 🚀 (4) 
+
+[08/08/2022 7:27 PM] hardlydifficult
+hm
+
+{Reactions}
+🔆 (9) 
+
+[08/08/2022 7:39 PM] 0xdjango
+https://tenor.com/view/oh-hey-ryan-reynolds-flirty-smile-gif-5942531
+
+{Embed}
+https://tenor.com/view/oh-hey-ryan-reynolds-flirty-smile-gif-5942531
+Oh hey
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/oh-hey-ryan-reynolds-80E2E.png
+
+{Reactions}
+😂 (8) 💜 
+
+[08/08/2022 8:08 PM] codingnamekiki
+:chefskiss:
+
+
+[08/09/2022 9:36 AM] tofunmi
+Please be foundry 🍴😩 😋
+
+{Reactions}
+❤️ 
+
+[08/09/2022 9:54 AM] JohnSmith#1623
+Looking at their previous contest repo, it is safe to assume it will be hardhat
+
+{Reactions}
+🎉 
+
+[08/09/2022 9:58 AM] codingnamekiki
+hopefully one gaz optim will be enough to buy few slices of pizza then
+
+{Reactions}
+🍕 (4) 
+
+[08/09/2022 10:40 AM] hardlydifficult
+We did our testing in Hardhat but I set you up with a simple Forge test as well so you could use that to break things
+
+{Reactions}
+💯 (7) 
+
+[08/09/2022 12:35 PM] tofunmi
+Cool thanks
+
+
+[08/09/2022 12:38 PM] tofunmi
+Test files aren't important imo
+Attackers don't care about  the tests, they look at ur etherscan
+
+
+[08/09/2022 12:38 PM] tofunmi
+You have all the badges 🔥
+
+{Reactions}
+🔥 (4) 
+
+[08/09/2022 12:39 PM] hardlydifficult
+of course they don't matter in the end. but they can be helpful for some wardens poking around. ...are you saying that including a Goerli instance would be helpful for the contest?
+
+{Reactions}
+👍 (2) 
+
+[08/09/2022 12:41 PM] minh___
+they make POCs significantly easier. Also they ensure that you dont setup things incorrectly
+
+{Reactions}
+👍 (3) 
+
+[08/09/2022 12:41 PM] tofunmi
+It actually not , but good for things that include signing a message on the front end
+
+
+[08/09/2022 12:42 PM] tofunmi
+Include it actually , we fuzz everything,  we smoke and poke anything
+To fulfil all righteousness
+
+
+[08/09/2022 12:43 PM] tofunmi
+I mean to the auditor though
+
+
+[08/09/2022 12:45 PM] hardlydifficult
+everyone's got their own style. we're just trying to prep anything that might be helpful. i want your time to be as productive as possible. there's always a lot to learn from you all (& that's why I have that judge badge too 😉
+
+{Reactions}
+📛 (3) thankyou ❤️ 
+
+[08/09/2022 12:46 PM] tofunmi
+🔥
+
+
+[08/09/2022 6:34 PM] 0xa5df
+Less time spent on PoC = more time spent on finding bugs = more bugs found (which is also the interest of the sponsor after all)
+
+{Reactions}
+👍 (2) 💯 (4) 
+
+[08/11/2022 8:00 PM] hardlydifficult
+👀
+
+{Reactions}
+👀 (2) TimeswapLogoDiscord badgerchad 🔥 
+
+[08/11/2022 8:03 PM] hardlydifficult
+Excited to see what you all come up with -- always lots to learn here! Let me or @batu know if you have any questions, here or via DM
+
+{Reactions}
+goose (3) 
+
+[08/11/2022 8:04 PM] Franfran#5067
+let's heck
+
+
+[08/11/2022 8:04 PM] hardlydifficult
+hm
+
+{Reactions}
+🔆 (4) 
+
+[08/11/2022 8:57 PM] tofunmi
+remappings.txt missing,  forge tests not running
+
+
+[08/11/2022 8:58 PM] hardlydifficult
+the remappings are inside the toml config. we tried this on a few machines and it ran. are you on the latest version?
+
+
+[08/11/2022 8:58 PM] tofunmi
+Haven't run foundryup in 4 to 5 days
+
+
+[08/11/2022 8:58 PM] tofunmi
+Thanks
+
+
+[08/11/2022 8:59 PM] hardlydifficult
+😆 didn't realize things were changing that quickly.  but did foundryup fix the problem for you?
+
+
+[08/11/2022 8:59 PM] dravee
+I can confirm that it'll run after a foundryup 😄 (please do say if it worked for you too)
+
+
+[08/11/2022 9:00 PM] tofunmi
+Nope 🥺
+
+
+[08/11/2022 9:01 PM] hardlydifficult
+hmm can you paste in the error?
+
+
+[08/11/2022 9:02 PM] tofunmi
+Unable to resolve  imports
+
+
+[08/11/2022 9:03 PM] tofunmi
+I would create a remappings file
+
+
+[08/11/2022 9:03 PM] dravee
+I had the same errors, had to run multiple rms (forge, cast and anvil) so that foundryup could reinstall them
+
+
+[08/11/2022 9:03 PM] tofunmi
+Even remove foundry and installed from the curl
+
+{Reactions}
+💯 
+
+[08/11/2022 9:03 PM] dravee
+Are you getting some error messages on foundryup?
+
+
+[08/11/2022 9:03 PM] tofunmi
+Yes
+
+
+[08/11/2022 9:04 PM] dravee
+For me it was that I had already "cargo installed forge, cast and anvil". I had to remove them so that the setup instructions don't show these messages. Then it went ok
+
+
+[08/11/2022 9:05 PM] tofunmi
+I removed home/user/foundry,  foundry's path completely
+
+
+[08/11/2022 9:06 PM] dravee
+This is what I had, do you have something similar? For once, the error message and mitigation were pretty clear ^^
+```
+foundryup: warning: it appears your system has already has forge installed via cargo. you may need to run 'rm /Users/dravee/.cargo/bin/forge' to allow foundryup to take precedence!
+foundryup: warning: it appears your system has already has cast installed via cargo. you may need to run 'rm /Users/dravee/.cargo/bin/cast' to allow foundryup to take precedence!
+foundryup: warning: it appears your system has already has anvil installed via cargo. you may need to run 'rm /Users/dravee/.cargo/bin/anvil' to allow foundryup to take precedence!
+```
+
+
+[08/11/2022 9:07 PM] tofunmi
+Nope
+
+{Reactions}
+😭 (2) 
+
+[08/11/2022 9:07 PM] dravee
+I really had to run the 3 rms to correct the remappings error
+
+
+[08/11/2022 9:08 PM] devtooligan
+i got foundry tests to work.  one thing i had to do was add a line to foundry.toml `solc = "0.8.12"` because theres a bug in the latest version of foundry that wont allow compiling on 0.8.15
+
+
+[08/11/2022 9:11 PM] hardlydifficult
+I can't repo that either... just upgraded again to see... why is forge so inconsistent 😭
+
+{Reactions}
+🥲 
+
+[08/11/2022 9:12 PM] dravee
+Next time, I'm creating a docker image with the contest's environment 😂
+
+{Reactions}
+👍 (2) 💯 
+
+[08/11/2022 9:12 PM] hardlydifficult
+hah that's probably the safest route
+
+
+[08/11/2022 9:16 PM] hardlydifficult
+could you try `forge config` and show us the `libs` array? i just did some testing and it seems the remappings we added are not needed, just the two libs in our toml
+
+
+[08/11/2022 9:16 PM] tofunmi
+Hmmm , there is no openzeppin contracts in the lib folder in the first place
+
+
+[08/11/2022 9:16 PM] hardlydifficult
+it's using node modules for oz
+
+
+[08/11/2022 9:17 PM] hardlydifficult
+this line in the toml makes it work nicely along side hardhat `libs = ['lib','node_modules']`
+
+
+[08/11/2022 9:17 PM] tofunmi
+Hate yarn install af , didn't do that
+
+
+[08/11/2022 9:17 PM] hardlydifficult
+ahhhhhh
+
+
+[08/11/2022 9:18 PM] hardlydifficult
+okay that'll do it
+
+
+[08/11/2022 9:18 PM] tofunmi
+Thought that since it was foundry
+
+
+[08/11/2022 9:18 PM] hardlydifficult
+i'll update the readme real quick to clarify that forge needs yarn too
+
+
+[08/11/2022 9:19 PM] hardlydifficult
+oh wait it's already in there -- but it's good to note in case others run into that as well
+
+{Reactions}
+😅 
+
+[08/12/2022 7:30 AM] ch_301
+Its ERC-1167 ✅  not ERC-1165 🟥
+
+{Attachments}
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/unknown-CB0DC.png
+
+{Reactions}
+😂 (3) 🙏 👍 👏 
+
+[08/12/2022 7:32 AM] hardlydifficult
+😆 opps.. thanks!
+
+{Reactions}
+😅 
+
+[08/12/2022 2:26 PM] 0xmatt#3768
+Hi is anyone from the project available to chat about something over DM? Maybe @HardlyDifficult or @batu ?
+
+{Reactions}
+👍 
+
+[08/12/2022 2:27 PM] hardlydifficult
+yup - i'm around
+
+
+[08/12/2022 3:02 PM] ak19966
+@HardlyDifficult sent request
+
+{Reactions}
+✅ 
+
+[08/12/2022 3:50 PM] carlitox477
+Hi! @HardlyDifficult and @batu I sent you a friend request, may I ask you a question by DM please?
+
+{Reactions}
+✅ (2) 
+
+[08/12/2022 5:19 PM] hardlydifficult
+lots of good questions & concerns coming in. feel free to reach out! we're happy to clarify goals or how things are expected to work, and if you find an issue we might be able to help you confirm it & add some color for your submission
+
+i'm not interested in getting a report that says no issues found. I'm here to learn and make the product better. So I'm happy to help you secure that High!
+
+{Reactions}
+❤️ (26) hi5 (6) 
+
+[08/14/2022 4:00 PM] thank_you_
+Is there an expectation that the NFTDropMarket will ever hold ETH? My assumption is no but want to double check.
+
+
+[08/14/2022 4:05 PM] hardlydifficult
+Correct, it shouldn’t hold any eth or other assets, it just facilities drop mint transactions
+
+{Reactions}
+👌 (2) 
+
+[08/14/2022 8:47 PM] SpaceCake#8961
+Newbie question 😅 : "contracts/mocks" is out of the scope? (for gas optimisations, if that's relevant)
+
+{Reactions}
+😂 
+
+[08/14/2022 9:12 PM] hardlydifficult
+That's right, out of scope. We're not trying to optimize tests here! ...although I am working on making them run faster for a better devEx next time around 😉
+
+
+[08/14/2022 9:35 PM] hardlydifficult
+Final day -- can't wait to see what you all have found. 
+
+Again don't hesitate to DM any questions! 16 wardens have already reached out to me... if it might save you a few minutes of poking around, just ask
+
+{Reactions}
+💯 (2) 
+
+[08/15/2022 3:00 PM] hardlydifficult
+🕔  T - 5 hours. we are around the whole time for any final questions
+
+{Reactions}
+chefskiss (2) 
+
+[08/15/2022 8:02 PM] C4
+**🚨 CONTEST ALERT**
+
+@🐺wardens The **Foundation Drop** contest is now closed! Huge thanks to everyone who participated 🔍, whether you submitted a finding or not.
+
+What's next: the **Foundation** team will review the findings over the next couple of days, and then we'll pass them off to the judge. Keep an eye on #📢announcements for regular updates on how the contest is progressing through awarding 🤑🏆, judging 🧑‍⚖️ and reporting 📜. Feel free to ping a gardener if you have questions along the way!
+
+{Reactions}
+🔥 (10) 
+
+[08/15/2022 8:06 PM] hardlydifficult
+Thanks to everyone who participated! I'm excited to dive in, already started skimming over some of the submissions -- always something to learn here.
+
+286 submissions; 34 submitted as high and 91 as medium. obviously these numbers will change a lot after we review & judge. so just a quick fyi on how it went 🙂
+
+{Reactions}
+🔥 (22) hi5 (5) praisethesun (3) peepoeyes (3) 
+
+[08/15/2022 9:12 PM] horsefacts
+You made this a tough one @HardlyDifficult! It's almost like whoever wrote this is familiar with common c4 findings...
+
+{Reactions}
+💯 (8) 😂 (4) 
+
+[08/15/2022 9:14 PM] hardlydifficult
+apparently I missed a `++i` optimization in one spot though... just an admin function but still kicking myself for that 😭
+
+{Reactions}
+🔥 (2) 2️⃣ (2) 👀 (3) 
+
+[08/15/2022 9:15 PM] 0xsorrynotsorry
+No worries, many wardens liked it :)
+
+{Reactions}
+😆 (3) 
+
+[08/15/2022 9:47 PM] karmacoma
+
+
+{Attachments}
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/unknown-086F2.png
+
+{Reactions}
+🤣 (34) 
+
+[08/16/2022 8:21 AM] codingnamekiki
+https://tenor.com/view/michael-scott-wink-yes-i-got-you-boo-gif-16575286
+
+{Embed}
+https://tenor.com/view/michael-scott-wink-yes-i-got-you-boo-gif-16575286
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/michael-scott-wink-76E4C.png
+
+{Reactions}
+😂 
+
+[08/16/2022 8:59 AM] devabdee
+Not one, it was like 3 🤩😂
+
+
+[08/16/2022 9:00 AM] hardlydifficult
+wait 3?! 🤦‍♂️  i see 2 in the admin update functions... called it one by mistake above cause in my head that's the same code lol.  ...but i haven't read the gas reports yet so will dig in more soon. we are still going through HMs atm
+
+
+[08/16/2022 9:01 AM] codingnamekiki
+3? even better xoxo
+
+
+[08/16/2022 9:03 AM] hardlydifficult
+...i should resign. how could i have missed c4's favorite issue report
+
+{Reactions}
+😂 (6) 
+
+[08/16/2022 9:05 AM] codingnamekiki
+your contest gave me hard time, l actually found only few low risks
+
+{Reactions}
+❤️ (2) 
+
+[08/16/2022 9:05 AM] codingnamekiki
+https://tenor.com/view/spongebob-sad-sad-face-alone-waiting-gif-21396787
+
+{Embed}
+https://tenor.com/view/spongebob-sad-sad-face-alone-waiting-gif-21396787
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/spongebob-sad-A44ED.png
+
+{Reactions}
+❤️ (2) 🙏 empathy 
+
+[08/16/2022 9:07 AM] hardlydifficult
+good - my job is to make yours difficult 😉 but jokes aside -- there really are some great reports here. i say it all the time, but i love this place & all the creative thinking that goes into submissions - i'm always learning and that makes the job fun for me
+
+{Reactions}
+hi5 (18) 🔥 (3) 
+
+[08/16/2022 1:21 PM] kartoonjoy
+Pinned a message.
+
+
+[08/17/2022 12:01 PM] sockdrawermoney
+You’re a rad part of the community. We are lucky to have you part of it, HD!
+
+{Reactions}
+💯 (6) 🙏 
+
+[08/18/2022 9:33 PM] hardlydifficult
+We've already opened 57 PRs, and I haven't even read all the reports yet 🔥 
+(most are very small, but still)
+
+{Reactions}
+🔥 (13) ❤️‍🔥 (2) 
+
+[09/10/2022 7:27 AM] codingnamekiki
+any news on this one? 👀
+
+
+[09/10/2022 10:42 AM] hardlydifficult
+Judging is done, backstage QA should wrap up this weekend
+
+{Reactions}
+🥳 (7) 
+
+[09/15/2022 4:18 PM] Ignacio#9604
+any update?
+
+
+[09/22/2022 2:09 AM] nine9#5720
+How it's going?
+
+
+[09/22/2022 7:21 PM] hardlydifficult
+drops are live on mainnet 🎉 
+so things went great from our perspective. thanks everyone for the feedback - we made a lot of improvements
+
+i suspect c4 is close to payouts at this point
+
+{Reactions}
+peepoeyes (8) praisethesun (6) 👀 (3) 4739_Skeletor (3) 🚀 (3) 
+
+[09/23/2022 3:47 AM] ladboy233
+https://github.com/code-423n4/code423n4.com/commit/3c53dcfd0552790a5b5f411ac24d81468e6e3a90
+
+{Reactions}
+🎉 (3) 4739_Skeletor 
+
+[09/23/2022 3:47 AM] ladboy233
+it is here. the reward number.
+
+
+[09/23/2022 6:04 PM] itsmetechjay
+🤑 🎉 Awards for **Foundation Drop**:
+
+$9,387.62 USDC » @Roman 
+$9,277.77 USDC » @joestakey 
+$2,924.09 USDC » KIntern_NA (@TrungOre, @duc)
+$2,896.65 USDC » @byndooa 
+$2,398.02 USDC » @shenwilly 
+$1,757.37 USDC » @bin2chen 
+$1,240.78 USDC » @Bernd 
+$1,239.89 USDC » @0x52 
+$1,176.40 USDC » @3xHarry 
+$1,155.80 USDC » @peritoflores 
+$456.77 USDC » @Dravee 
+$438.64 USDC » @Saw-mon and Natalie 
+$196.91 USDC » @0x1f8b 
+$171.72 USDC » @IllIllI 
+$162.70 USDC » @c3phas 
+$135.30 USDC » zkhorse (@karmacoma, @horsefacts)
+$135.24 USDC » @Chom 
+$123.05 USDC » @rbserver 
+$117.48 USDC » @Deivitto 
+$105.15 USDC » @Django | Saloon Finance 
+$104.69 USDC » @ladboy233小伙子 
+$104.64 USDC » @wagmi 
+$97.21 USDC » @Treasure-Seeker 
+$97.20 USDC » @cccz 
+$91.00 USDC » @csanuragjain 
+$86.03 USDC » @ReyAdmirado 
+$84.09 USDC » @auditor0517 
+$84.09 USDC » PwnedNoMore (@izhuer, @ItsNio, @papr1ka2)
+$84.04 USDC » @thank_you 
+$83.43 USDC » @thinklab 
+$80.29 USDC » @Bnke 
+$76.73 USDC » @EricTee 
+$75.83 USDC » @Rolezn 
+$75.06 USDC » @durianSausage 
+$74.99 USDC » LeoS
+$74.99 USDC » @Rohan 
+$74.99 USDC » @Sm4rty 
+$74.97 USDC » @zeesaw 
+$74.97 USDC » @brgltd 
+$74.71 USDC » @carlitox477 
+$73.00 USDC » @0xSmartContract 
+$67.43 USDC » @simon135 
+$66.92 USDC » @MiloTruck 
+$64.54 USDC » @gogo 
+$64.54 USDC » @JC
+$63.32 USDC » @0xNazgul 
+$62.96 USDC » @d3e4 
+$62.55 USDC » @TomJ 
+$62.15 USDC » @__141345__ 
+$62.02 USDC » @robee 
+$62.00 USDC » @rvierdiiev 
+$62.00 USDC » @DevABDee 
+$62.00 USDC » @code-cipher 
+$61.88 USDC » @Waze 
+$61.88 USDC » @fatherOfBlocks 
+$61.81 USDC » mics
+$61.80 USDC » @bobirichman7542 
+$61.80 USDC » @ElKu 
+$61.80 USDC » @bulej93 
+$61.80 USDC » @apostle0x01 
+$61.80 USDC » @sikorico 
+$61.80 USDC » @Yiko
+
+{Reactions}
+C4Keycap (7) 
+
+[09/23/2022 6:04 PM] itsmetechjay
+$58.25 USDC » 0xsolstars (@Varun_Verma, @masterchief)
+$45.08 USDC » @Ruhum 
+$42.83 USDC » @Ch_301 
+$42.83 USDC » @nine9 
+$42.83 USDC » @yixxas 
+$42.83 USDC » @P12473 
+$42.28 USDC » @yash 
+$41.71 USDC » @0xSolus 
+$41.26 USDC » @danb 
+$41.26 USDC » @delfin454000 
+$41.21 USDC » @Kumpa 
+$41.21 USDC » @ret2basic.eth 
+$41.21 USDC » @rokinot 
+$41.20 USDC » @jonatascm 
+$41.20 USDC » @Vexjon 
+$41.20 USDC » @cryptphi 
+$41.20 USDC » @0xackerman 
+$41.20 USDC » @0xmatt 
+$41.20 USDC » @iamwhitelights 
+$40.70 USDC » @0xkatana 
+$33.85 USDC » @Noah3o6 
+$33.78 USDC » @CodingNameKiki 
+$33.77 USDC » @Diraco 
+$33.77 USDC » @Ignacio 
+$22.31 USDC » @ajtra 
+$21.30 USDC » @jag 
+$21.30 USDC » @saian 
+$20.68 USDC » @Tomio 
+$20.68 USDC » Trabajo_de_mates (@Saintcode_, @rafatatay)
+$20.62 USDC » @Amithuddar 
+$20.60 USDC » @pfapostol 
+$20.60 USDC » @0X040 
+$20.60 USDC » 0xbepresent
+$20.60 USDC » @cRat1st0s 
+$20.60 USDC » @Fitraldys 
+$20.60 USDC » @Funen 
+$20.60 USDC » @gerdusx 
+$20.60 USDC » @Metatron 
+$20.60 USDC » @samruna 
+$20.60 USDC » @SpaceCake 
+$20.60 USDC » @zuhaibmohd 
+$20.60 USDC » @hakerbaya 
+$20.60 USDC » @medikko 
+$20.60 USDC » @newfork01 
+$20.60 USDC » @sach1r0 
+$13.17 USDC » @0xc0ffEE 
+
+🏁 Findings summary
+---------------------------
+Med risk findings: 63 total, 8 unique
+Gas optimization reports: 73 
+QA reports: 73
+
+Awards will be distributed on Polygon within the next 1-2 weeks. Congratulations! 💸 💸
+
+*Note: If you participated in this contest and don’t see your name on this list, please wait until the report is published and the findings repo is made public to check on your submissions. *
+
+{Reactions}
+C4Keycap (3) 🤙🏻 (3) 
+
+[09/23/2022 6:14 PM] devtooligan
+mediums have been making some bank lately
+
+
+[09/23/2022 6:15 PM] codingnamekiki
+ye got 10 dollars for my medium
+
+{Reactions}
+💰 
+
+[09/23/2022 6:16 PM] codingnamekiki
+https://tenor.com/view/bugs-bunny-looney-tunes-cash-money-counting-money-gif-17544086
+
+{Embed}
+https://tenor.com/view/bugs-bunny-looney-tunes-cash-money-counting-money-gif-17544086
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/bugs-bunny-looney-tunes-6263B.png
+
+
+[09/23/2022 6:18 PM] bnke0x0
+https://tenor.com/view/will-ferrell-stressed-out-i-need-a-drink-calm-my-nerves-wine-gif-17733253
+
+{Embed}
+https://tenor.com/view/will-ferrell-stressed-out-i-need-a-drink-calm-my-nerves-wine-gif-17733253
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/will-ferrell-stressed-out-65DCF.png
+
+
+[09/24/2022 1:23 AM] devabdee
+Yayyy! Won my first hacking prize Alhumdulilah 🤩
+
+{Reactions}
+🎉 (6) 
+
+[10/03/2022 6:17 AM] SpaceCake#8961
+Hey Wardens 👋 
+For anybody awarded in this contest, have you received your USDC or not yet?
+I am wondering because I am worried I haven't configured MetaMask well.
+I am pretty sure I imported the right USDC token, but it's showing that I have a 0 balance, and I can't see any transactions in the Polygon Blockchain explorer 🤔
+
+
+[10/03/2022 6:32 AM] pfapostol
+Yes, and you must have received the USDC at the address: https://polygonscan.com/address/0x25e94b5304b9ee91c206480ff79fe779abbcf709#tokentxns
+
+{Embed}
+https://polygonscan.com/address/0x25e94b5304b9ee91c206480ff79fe779abbcf709
+Address 0x25e94b5304b9ee91c206480ff79fe779abbcf709 | PolygonScan
+The Address 0x25e94b5304b9ee91c206480ff79fe779abbcf709 page allows users to view transactions, balances, token holdings and transfers of both ERC-20 and ERC-721 (NFT) tokens, and analytics.
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/PolygonScan-logo-circle-6FDB5.jpg
+
+
+[10/03/2022 6:47 AM] codingnamekiki
+mr sir that's just your wallet address, this won't help him to understand, how to do it. 😅
+
+
+[10/03/2022 6:47 AM] codingnamekiki
+watch this video https://www.youtube.com/watch?v=LAv_wpDVLlM
+
+{Embed}
+MoneyZG
+https://www.youtube.com/watch?v=LAv_wpDVLlM
+Polygon MetaMask Tutorial (How to Use Polygon MATIC Wallet for Ethe...
+Polygon MetaMask tutorial - how to set up Polygon Wallet, use Polygon Bridge to move Ethereum tokens to Polygon Matic wallet and use Ethereum DeFi DAPPS like AAVE on Polygon network. Polygon tutorial with MetaMask
+
+Trade on Binance: https://bit.ly/Binance-MZG
+Trezor Hardware Wallet: https://bit.ly/Trezor-ZG
+Use VPN to Protect Yourself: https://b...
+Code4rena - ARCHIVE-Q3-2022 - ☑foundation-aug11 [1006281012931739698].txt_Files/maxresdefault-7ADB4.jpg
+
+
+[10/03/2022 6:50 AM] pfapostol
+This is his wallet address.
+
+
+[10/03/2022 6:54 AM] codingnamekiki
+mb didn't see the part, where he mentioned his wallet address. If this is the problem, he probably didn't import the USDC right
+
+
+[10/03/2022 6:57 AM] pfapostol
+all wallet addresses are public information
+
+
+[10/03/2022 6:59 AM] codingnamekiki
+oh cool so there is leaderboard with every person and their address. Mind sending me the link?
+
+
+[10/03/2022 7:02 AM] pfapostol
+on code4rena github you can find information about each person and each contest. But this information does not relate to this particular contest, so it is better to use another channel for further discussion.
+
+{Reactions}
+👍 
+
+[10/03/2022 7:02 AM] codingnamekiki
+got it thanks
+
+
+[10/03/2022 7:47 AM] SpaceCake#8961
+@pfapostol @CodingNameKiki Thank you kind humans! The money is there. I was checking the wrong wallet on the wrong browser 🤦‍♂️
+
+{Reactions}
+🤙🏻 
+
+==============================================================
+Exported 111 message(s)
+==============================================================
